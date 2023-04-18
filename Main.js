@@ -15,17 +15,19 @@ const [table, tableController] = Table({
   ],
 });
 
-container.insertBefore(table, container.childNodes[0]);
-addRowBtn.addEventListener("click", tableController.addRow);
-downloadBtn.addEventListener("click", tableController.download);
-
-document.getElementById("load-btn").addEventListener("click", () => {
+function readFile(){
   let file = document.getElementById("csvFile").files[0];
   if (file) {
     tableController.loadCSV(file);
     modal.style.display = "none";
   }
-});
+}
+
+container.insertBefore(table, container.childNodes[0]);
+addRowBtn.addEventListener("click", tableController.addRow);
+downloadBtn.addEventListener("click", tableController.download);
+
+document.getElementById("load-btn").addEventListener("click", readFile);
 
 uploadBtn.addEventListener("click", (e) => {
   e.preventDefault();

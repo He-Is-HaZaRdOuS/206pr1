@@ -104,6 +104,7 @@ const Table = (data) => {
       let rows = e.target.result.split("\r\n");
       rows.forEach((r) => {
         let splitted = r.split(";");
+        console.log(splitted);
         data.body.push(splitted);
         if (splitted.length > data.colCount) {
           data.colCount = splitted.length;
