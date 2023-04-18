@@ -3,6 +3,9 @@ import { LectureHalls } from "./LectureHalls.js";
 import { Instructor } from "./Instructor.js";
 import { ServiceCourse } from "./ServiceCourse.js";
 import { Course } from "./Course.js";
+import { Instructor } from "./Instructor.js";
+import { ServiceCourse } from "./ServiceCourse.js";
+import { Course } from "./Course.js";
 
 const addRowBtn = document.getElementById("add-row");
 const downloadBtn = document.getElementById("download");
@@ -76,4 +79,3 @@ window.onclick = function (event) {
 
 // make below objects public
 export {myArray, validDays, validTimes};
-
