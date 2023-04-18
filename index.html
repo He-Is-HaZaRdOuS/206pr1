@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title>CSV Editor</title>
+  </head>
+  <body>
+    <div class="container" id="cnt" style="display: flex">
+      <table id="table"></table>
+      <div class="row">
+        <button class="icon-btn" id="add-row" title="add row">
+          <i class="fa fa-plus"></i>
+        </button>
+        <button class="icon-btn" id="upload" title="upload">
+          <i class="fa fa-upload"></i>
+        </button>
+        <button class="icon-btn" id="download" title="download">
+          <i class="fa fa-download"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <form>
+          <h2>Select a csv file to edit (WIP)</h2>
+          <p>This will delete the current table</p>
+          <div class="modal-btn-container">
+            <label class="modal-btn">
+              <input
+                type="file"
+                accept=".csv"
+                id="csvFile"
+                name="filename"
+                style="display: none"
+              />
+              Select file
+            </label>
+            <input class="modal-btn" value="Upload" id="load-btn" />
+          </div>
+        </form>
+      </div>
+    </div>
+    <script type="module" src="csv.js"></script>
+  </body>
+</html>
