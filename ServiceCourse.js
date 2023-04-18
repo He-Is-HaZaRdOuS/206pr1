@@ -1,6 +1,4 @@
-import { validDays, validTimes } from "./Main.js";
-
-class Instructors{
+class ServiceCourse{
     // variables
     name;
     day;
@@ -14,10 +12,8 @@ class Instructors{
 
         // override toString, console.log() does not automatically call this method so you need to explicitly call it.
         toString(){
-            return `Instructor ${this.name} is Busy on ${this.day.description} ${this.time.description}`;
+            return `${this.name} is reserved on ${this.day.description} ${this.time.description}`;
         }
-
 }
 
-// make class public
-export {Instructors};
+export {ServiceCourse};
