@@ -105,14 +105,12 @@ const Table = (data) => {
     let reader = new FileReader();
     reader.readAsText(file, "UTF-8");
     reader.onload = (e) => {
-      // data.colCount data.headers data.body
       data.body = [];
       data.headers = [];
       data.colCount = 0;
       let rows = e.target.result.split("\r\n");
       rows.forEach((r) => {
         let splitted = r.split(";");
-        //console.log(splitted);
         data.body.push(splitted);
         myArray.data.push(splitted);
         if (splitted.length > data.colCount) {
