@@ -24,7 +24,7 @@ function readFile(){
   let file = document.getElementById("csvFile").files[0];
   if (file) {
     tableController.loadCSV(file);
-    myArray.data.push("DEEEEEZ NUTZZZZZ");
+    //myArray.data.push("DEEEEEZ NUTZZZZZ");
     console.log(myArray.data);
     modal.style.display = "none";
   }
