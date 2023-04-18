@@ -3,9 +3,6 @@ import { LectureHalls } from "./LectureHalls.js";
 import { Instructor } from "./Instructor.js";
 import { ServiceCourse } from "./ServiceCourse.js";
 import { Course } from "./Course.js";
-import { Instructor } from "./Instructor.js";
-import { ServiceCourse } from "./ServiceCourse.js";
-import { Course } from "./Course.js";
 
 const addRowBtn = document.getElementById("add-row");
 const downloadBtn = document.getElementById("download");
@@ -39,31 +36,49 @@ const validTimes = Object.freeze({
   Afternoon: Symbol("afternoon"),
 })
 
-var tempCounter = 0;
-var objectCounter = 0;
-let myArray = {
-  data: [],
+var array = [];
+var length = 0;
+var s = new ServiceCourse();
+
+async function readFile(){
+
+  let file = document.getElementById("csvFile").files[0];
+  if (file) {
+    tableController.loadCSV(file).then(a => { 
+      // everything outside the curly braces is async, need to assign array to objects in here and nowhere else
+      //console.log(a); 
+      array = a;
+      console.log(array)
+
+    })
+    .catch(error => {
+      console.error(error); // Error handling
+    });
+    
+   // var myArray = await tableController.loadCSV(file);
+   // console.log(myArray);
+   /* switch(length){
+      case 8:
+      break;
+    }*/
+    modal.style.display = "none";
+  //  return myArray;
+  }
+}
+
+async function startReadingFile(){
+  await readFile();
+  // everything below is async
+  //console.log(array);
 };
 
 
-function readFile(){
-  let file = document.getElementById("csvFile").files[0];
-  if (file) {
-    tableController.loadCSV(file);
-    switch(tempCounter){
-      case 0:
-      break;
-    }
-    modal.style.display = "none";
-    tempCounter++;
-  }
-}
 
 container.insertBefore(table, container.childNodes[0]);
 addRowBtn.addEventListener("click", tableController.addRow);
 downloadBtn.addEventListener("click", tableController.download);
 
-document.getElementById("load-btn").addEventListener("click", readFile);
+document.getElementById("load-btn").addEventListener("click", startReadingFile);
 
 uploadBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -78,4 +93,4 @@ window.onclick = function (event) {
 
 
 // make below objects public
-export {myArray, validDays, validTimes};
+export { length, s, validDays, validTimes};
