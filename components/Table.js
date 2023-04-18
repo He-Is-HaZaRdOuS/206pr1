@@ -1,3 +1,5 @@
+import {myArray} from "../Main.js";
+
 const Table = (data) => {
   const table = document.createElement("table");
   const header = document.createElement("thead");
@@ -104,8 +106,9 @@ const Table = (data) => {
       let rows = e.target.result.split("\r\n");
       rows.forEach((r) => {
         let splitted = r.split(";");
-        console.log(splitted);
+        //console.log(splitted);
         data.body.push(splitted);
+        myArray.data.push(splitted);
         if (splitted.length > data.colCount) {
           data.colCount = splitted.length;
         }
@@ -114,6 +117,7 @@ const Table = (data) => {
       bodyBuilder();
     };
   };
+
 
   const controllers = {
     addRow: addRow,
@@ -127,4 +131,4 @@ const Table = (data) => {
   return [table, controllers];
 };
 
-export default Table;
+export {Table};

@@ -1,10 +1,15 @@
-import Table from "./components/Table.js";
+import {Table} from "./components/Table.js";
 
 const addRowBtn = document.getElementById("add-row");
 const downloadBtn = document.getElementById("download");
 const uploadBtn = document.getElementById("upload");
 const container = document.getElementById("cnt");
 const modal = document.getElementById("modal");
+
+// object array
+let myArray = {
+    data: [],
+};
 
 const [table, tableController] = Table({
   headers: ["A", "B"],
@@ -19,6 +24,8 @@ function readFile(){
   let file = document.getElementById("csvFile").files[0];
   if (file) {
     tableController.loadCSV(file);
+    myArray.data.push("DEEEEEZ NUTZZZZZ");
+    console.log(myArray.data);
     modal.style.display = "none";
   }
 }
@@ -39,3 +46,8 @@ window.onclick = function (event) {
     modal.style.display = "none";
   }
 };
+
+//myArray.data.push("DEEEEEZ NUTZZZZZ");
+//console.log(myArray.data);
+
+export {myArray};
