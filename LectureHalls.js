@@ -14,6 +14,7 @@ class LectureHalls{
         return `${this.id} ${this.capacity}`;
     }
 
+
 }
 
 // make class public

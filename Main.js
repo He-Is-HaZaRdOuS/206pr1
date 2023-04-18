@@ -1,5 +1,6 @@
 import {Table} from "./components/Table.js";
-import { LectureHalls } from "./LectureHalls.js";
+import { LectureHalls } from "./LectureHalls.js"; 
+import { Instructors } from "./Instructors.js";
 
 const addRowBtn = document.getElementById("add-row");
 const downloadBtn = document.getElementById("download");
@@ -39,6 +40,22 @@ function readFile(){
   }
 }
 
+// final enum for days
+const validDays = Object.freeze({
+  Monday: Symbol("monday"),
+  Tuesday: Symbol("tuesday"),
+  Wednesday: Symbol("wednesday"),
+  Thursday: Symbol("thursday"),
+  Friday: Symbol("friday"),
+
+})
+
+// final enum for times of the day
+const validTimes = Object.freeze({
+  Morning: Symbol("morning"),
+  Afternoon: Symbol("afternoon"),
+})
+
 container.insertBefore(table, container.childNodes[0]);
 addRowBtn.addEventListener("click", tableController.addRow);
 downloadBtn.addEventListener("click", tableController.download);
@@ -56,5 +73,8 @@ window.onclick = function (event) {
   }
 };
 
-// make array public
-export {myArray};
+let Evren = new Instructors("Yusuf Evren Aykac", validDays.Tuesday, validTimes.Morning);
+console.log(Evren.toString());
+
+// make below objects public
+export {myArray, validDays, validTimes};
