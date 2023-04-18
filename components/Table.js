@@ -1,5 +1,6 @@
 import {myArray} from "../Main.js";
 
+// Table class
 const Table = (data) => {
   const table = document.createElement("table");
   const header = document.createElement("thead");
@@ -57,7 +58,7 @@ const Table = (data) => {
   headerBuilder();
   bodyBuilder();
 
-  // table controllers
+  // table controllers (methods)
   const addRow = () => {
     data.body.push([]);
     bodyBuilder();
@@ -95,6 +96,11 @@ const Table = (data) => {
     window.open("data:text/csv;charset=utf-8," + encodeURIComponent(content));
   };
 
+  const editClassRoom = (hall, id, capacity) => {
+    hall.id = id;
+    hall.capacity = capacity;
+  };
+
   const loadCSV = (file) => {
     let reader = new FileReader();
     reader.readAsText(file, "UTF-8");
@@ -118,7 +124,7 @@ const Table = (data) => {
     };
   };
 
-
+  // object to store method definitions to be used outside this class
   const controllers = {
     addRow: addRow,
     deleteRow: deleteRow,
@@ -126,9 +132,11 @@ const Table = (data) => {
     deleteColumn: deleteColumn,
     download: download,
     loadCSV: loadCSV,
+    editClassRoom: editClassRoom,
   };
 
   return [table, controllers];
 };
 
+// make class public
 export {Table};

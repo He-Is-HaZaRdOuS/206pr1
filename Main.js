@@ -1,4 +1,5 @@
 import {Table} from "./components/Table.js";
+import { LectureHalls } from "./LectureHalls.js";
 
 const addRowBtn = document.getElementById("add-row");
 const downloadBtn = document.getElementById("download");
@@ -6,11 +7,16 @@ const uploadBtn = document.getElementById("upload");
 const container = document.getElementById("cnt");
 const modal = document.getElementById("modal");
 
-// object array
+// mutable object array
 let myArray = {
     data: [],
 };
 
+// mutable variable
+let B502 = new LectureHalls("B502", 100);
+console.log(B502.toString());
+
+// create table and tableController variables with arguments
 const [table, tableController] = Table({
   headers: ["A", "B"],
   colCount: 2,
@@ -20,11 +26,14 @@ const [table, tableController] = Table({
   ],
 });
 
+// change B502 variable from within the Table class, mutable
+tableController.editClassRoom(B502, "c43", 21);
+console.log(B502.toString());
+
 function readFile(){
   let file = document.getElementById("csvFile").files[0];
   if (file) {
     tableController.loadCSV(file);
-    //myArray.data.push("DEEEEEZ NUTZZZZZ");
     console.log(myArray.data);
     modal.style.display = "none";
   }
@@ -47,7 +56,5 @@ window.onclick = function (event) {
   }
 };
 
-//myArray.data.push("DEEEEEZ NUTZZZZZ");
-//console.log(myArray.data);
-
+// make array public
 export {myArray};
