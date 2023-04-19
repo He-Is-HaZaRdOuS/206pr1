@@ -3,10 +3,12 @@ class LectureHall{
     // variables
     id;
     capacity;
+    time;
+    day;
 
     constructor(id, capacity){
         this.id = id;
-        this.capacity = capacity;
+        this.capacity = Number(capacity);
     }
 
     // override toString, console.log() does not automatically call this method so you need to explicitly call it.

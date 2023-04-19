@@ -12,24 +12,9 @@
     <title>CSV Editor</title>
   </head>
   <body>
-    <div class="container" id="cnt" style="display: flex">
-      <table id="table"></table>
-      <div class="row">
-        <button class="icon-btn" id="add-row" title="add row">
-          <i class="fa fa-plus"></i>
-        </button>
-        <button class="icon-btn" id="upload" title="upload">
-          <i class="fa fa-upload"></i>
-        </button>
-        <button class="icon-btn" id="download" title="download">
-          <i class="fa fa-download"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="modal" id="modal">
-      <div class="modal-content">
-        <form>
+    <div id="root">
+      <div class="modal" id="modal">
+        <div class="modal-content">
           <h2>Select a csv file to edit (WIP)</h2>
           <p>This will delete the current table</p>
           <div class="modal-btn-container">
@@ -40,14 +25,16 @@
                 id="csvFile"
                 name="filename"
                 style="display: none"
+                multiple="multiple"
               />
               Select file
             </label>
-            <input class="modal-btn" value="Upload" id="load-btn" />
+            <button class="modal-btn" id="load-btn">Upload</button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
+    <script type="module" src="App.js"></script>
     <script type="module" src="Main.js"></script>
   </body>
 </html>

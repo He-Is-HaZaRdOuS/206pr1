@@ -3,6 +3,7 @@ class ServiceCourse{
     name;
     day;
     time;
+    year = 0;
 
     constructor(name, day, time){
         this.name = name;
