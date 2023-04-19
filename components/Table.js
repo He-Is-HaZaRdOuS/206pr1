@@ -1,4 +1,4 @@
-import { length, s} from "../Main.js";
+
 
 // Table class
 const Table = (data) => {

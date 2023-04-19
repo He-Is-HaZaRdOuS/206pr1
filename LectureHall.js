@@ -1,5 +1,5 @@
 // class to store info about classrooms
-class LectureHalls{
+class LectureHall{
     // variables
     id;
     capacity;
@@ -17,4 +17,4 @@ class LectureHalls{
 }
 
 // make class public
-export {LectureHalls};
+export {LectureHall};

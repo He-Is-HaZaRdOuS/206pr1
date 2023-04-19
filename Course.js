@@ -9,7 +9,7 @@ class Course{
     studentCount;
     instructorName;
 
-    constructor(name, day, time){
+    constructor(code, name, year, credit, CEbool, DSbool, studentCount, instructorName){
         this.code = code;
         this.name = name;
         this.year = year;
@@ -17,7 +17,7 @@ class Course{
         this.isCompulsory = CEbool;
         this.isService = DSbool;
         this.studentCount = studentCount;
-        this.instructorName = this.instructorName;
+        this.instructorName = instructorName;
     }
 
     /*
