@@ -5,10 +5,12 @@ class LectureHall{
     capacity;
     time;
     day;
+    isSoftOccupied;
 
     constructor(id, capacity){
         this.id = id;
         this.capacity = Number(capacity);
+        this.isSoftOccupied = false;
     }
 
     // override toString, console.log() does not automatically call this method so you need to explicitly call it.

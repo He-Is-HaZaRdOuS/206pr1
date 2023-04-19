@@ -3,7 +3,22 @@ import { Instructor } from "./models/Instructor.js";
 import { ServiceCourse } from "./models/ServiceCourse.js";
 import { Course } from "./models/Course.js";
 
-// final enum for days
+// final enum for days (pseudo-index)
+const validDaysDigit = Object.freeze({
+  Monday: Symbol("0"),
+  Tuesday: Symbol("2"),
+  Wednesday: Symbol("4"),
+  Thursday: Symbol("6"),
+  Friday: Symbol("8"),
+});
+
+// final enum for times of the day (pseudo-index)
+const validTimesDigit = Object.freeze({
+  Morning: Symbol("0"),
+  Afternoon: Symbol("1"),
+});
+
+// final enum for days (pseudo-index)
 const validDays = Object.freeze({
   Monday: Symbol("Monday"),
   Tuesday: Symbol("Tuesday"),
@@ -12,7 +27,7 @@ const validDays = Object.freeze({
   Friday: Symbol("Friday"),
 });
 
-// final enum for times of the day
+// final enum for times of the day (pseudo-index)
 const validTimes = Object.freeze({
   Morning: Symbol("Morning"),
   Afternoon: Symbol("Afternoon"),
@@ -38,46 +53,46 @@ function assignArrayToServiceObject(array, index) {
   if (array[1] == validDays.Monday.description) {
     serviceCourses[index] = new ServiceCourse(
       array[0],
-      validDays.Monday,
+      validDaysDigit.Monday,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimesDigit.Morning
+        : validTimesDigit.Afternoon
     );
     return true;
   } else if (array[1] == validDays.Tuesday.description) {
     serviceCourses[index] = new ServiceCourse(
       array[0],
-      validDays.Tuesday,
+      validDaysDigit.Tuesday,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimesDigit.Morning
+        : validTimesDigit.Afternoon
     );
     return true;
   } else if (array[1] == validDays.Wednesday.description) {
     serviceCourses[index] = new ServiceCourse(
       array[0],
-      validDays.Wednesday,
+      validDaysDigit.Wednesday,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimesDigit.Morning
+        : validTimesDigit.Afternoon
     );
     return true;
   } else if (array[1] == validDays.Thursday.description) {
     serviceCourses[index] = new ServiceCourse(
       array[0],
-      validDays.Thursday,
+      validDaysDigit.Thursday,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimesDigit.Morning
+        : validTimesDigit.Afternoon
     );
     return true;
   } else if (array[1] == validDays.Friday.description) {
     serviceCourses[index] = new ServiceCourse(
       array[0],
-      validDays.Friday,
+      validDaysDigit.Friday,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimesDigit.Morning
+        : validTimesDigit.Afternoon
     );
     return true;
   }
@@ -105,46 +120,46 @@ function assignArrayToInstructorObject(array, index) {
   if (array[1] == validDays.Monday.description) {
     instructors[index] = new Instructor(
       array[0],
-      validDays.Monday,
+      validDays.Monday.description,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimes.Morning.description
+        : validTimes.Afternoon.description
     );
     return true;
   } else if (array[1] == validDays.Tuesday.description) {
     instructors[index] = new Instructor(
       array[0],
-      validDays.Tuesday,
+      validDays.Tuesday.description,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimes.Morning.description
+        : validTimes.Afternoon.description
     );
     return true;
   } else if (array[1] == validDays.Wednesday.description) {
     instructors[index] = new Instructor(
       array[0],
-      validDays.Wednesday,
+      validDays.Wednesday.description,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimes.Morning.description
+        : validTimes.Afternoon.description
     );
     return true;
   } else if (array[1] == validDays.Thursday.description) {
     instructors[index] = new Instructor(
       array[0],
-      validDays.Thursday,
+      validDays.Thursday.description,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimes.Morning.description
+        : validTimes.Afternoon.description
     );
     return true;
   } else if (array[1] == validDays.Friday.description) {
     instructors[index] = new Instructor(
       array[0],
-      validDays.Friday,
+      validDays.Friday.description,
       array[2] == validTimes.Morning.description
-        ? validTimes.Morning
-        : validTimes.Afternoon
+        ? validTimes.Morning.description
+        : validTimes.Afternoon.description
     );
     return true;
   }
@@ -172,7 +187,6 @@ function findYearOfService(array){
 
 function coursePlannerAlgorithm(){
   cnt = 0;  // reset counter
-  var plan = [];
   let rows = 4;
   let columns = 10;
   var columnOffset = Number.MIN_SAFE_INTEGER;
@@ -182,21 +196,23 @@ function coursePlannerAlgorithm(){
   thirdGrade = [];
   fourthGrade = [];
 
+  
+
   // assign year property to serviceCourse objects
   findYearOfService(serviceCourses);
 
+  
   // create two dimensional array for final course plan ([4][10])
+  var plan = new Array(rows);
   for (let i = 0; i < rows; i++) {
-    plan[i] = [];
-    for (let j = 0; j < columns; j++) {
-      plan[i][j] = "";
-    }
+    plan[i] = new Array(columns);
   }
+
 
   // nest ServiceCourse objects into their respective Course objects
   for(let i = 0; i < serviceCourses.length; i++){
     for(let j = 0; j < courses.length; j++){
-      if(courses[j].code == serviceCourses[i].name){
+      if(courses[j].code == serviceCourses[i].name && courses[j].isService == true){
         courses[j].serviceObject = serviceCourses[i];
       }
     }
@@ -214,7 +230,7 @@ function coursePlannerAlgorithm(){
 
   // sort courses according to their year
   for(let i = 0; i < courses.length; i++){
-    let year = courses[i].year;
+    let year = Number(courses[i].year);
     switch(year){
       case 1:
           firstGrade.push(courses[i]);
@@ -248,55 +264,119 @@ function coursePlannerAlgorithm(){
     (obj1, obj2) => 
     (obj1.studentCount < obj2.studentCount) ? 1 : (obj1.studentCount > obj2.studentCount) ? -1 : 0);
 
-  // sort lecture halls too while at it :P
+  // sort lecture halls in ascending order [while at it :P]
   lectureHalls.sort(
     (obj1, obj2) => 
-    (obj1.capacity < obj2.capacity) ? 1 : (obj1.capacity > obj2.capacity) ? -1 : 0);
+    (obj1.capacity > obj2.capacity) ? 1 : (obj1.capacity < obj2.capacity) ? -1 : 0);
 
   // place Service courses ahead of time
-  // NEED TO ASSIGN LECTURE HALL OBJECTS INSIDE COURSE OBJECT WHEN PLACING IT INSIDE PLAN ARRAY 
-  for(let i = 0; i < firstGrade.length; i++){
-      if(firstGrade[i].isService == true){
-        if(firstGrade[i].serviceObject.time.description == validTimes.Morning.description){
-          columnOffset = 0; // zero offset if morning
+  for(let i = 0; i < lectureHalls.length; i++){
+      // check if an empty classroom is suitable
+      for(let j = 0; j < firstGrade.length; j++){
+        if(firstGrade[j].isService == true){
+          // store column info
+          columnIndex = Number(firstGrade[j].serviceObject.day.description);
+          columnOffset = Number(firstGrade[j].serviceObject.time.description);
+        // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
+        if((firstGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
+          || ((firstGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
+          && (firstGrade[j].serviceObject.day.description != lectureHalls[i].day.description
+          && firstGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+            // set properties
+            lectureHalls[i].isSoftOccupied = true;
+            lectureHalls[i].day = firstGrade[j].serviceObject.day;
+            lectureHalls[i].time = firstGrade[j].serviceObject.time;
+            firstGrade[j].currentHall = lectureHalls[i];
+            // place service course in the plan array
+            plan[0][columnIndex + columnOffset] = firstGrade[j];
         }
-        else{
-          columnOffset = 1; // one offset otherwise (afternoon)
-        }
-        // find column index number ( [columnIndex + columnOffset] will be used to store this course object into plan array)
-        switch(firstGrade[i].serviceObject.day.description){
-          case validDays.Monday.description:
-            columnIndex = 0;
-            break;
-
-          case validDays.Tuesday.description:
-            columnIndex = 2;
-            break;
-
-          case validDays.Wednesday.description:
-            columnIndex = 4;
-            break;
-
-          case validDays.Thursday.description:
-            columnIndex = 6;
-            break;
-
-          case validDays.Friday.description:
-            columnIndex = 8;
-            break;
-        }
-        plan[0][columnIndex+columnOffset] = firstGrade[i];
-      }  
+      }
+    }
   }
 
-  // do the same for the rest of the grades and then start placing department courses
+  // place Service courses ahead of time
+  for(let i = 0; i < lectureHalls.length; i++){
+    // check if an empty classroom is suitable
+    for(let j = 0; j < secondGrade.length; j++){
+      if(secondGrade[j].isService == true){
+        // store column info
+        columnIndex = Number(secondGrade[j].serviceObject.day.description);
+        columnOffset = Number(secondGrade[j].serviceObject.time.description);
+      // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
+      if((secondGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
+        || ((secondGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
+        && (secondGrade[j].serviceObject.day.description != lectureHalls[i].day.description
+        && secondGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+          // set properties
+          lectureHalls[i].isSoftOccupied = true;
+          lectureHalls[i].day = secondGrade[j].serviceObject.day;
+          lectureHalls[i].time = secondGrade[j].serviceObject.time;
+          secondGrade[j].currentHall = lectureHalls[i];
+          // place service course in the plan array
+          plan[1][columnIndex + columnOffset] = secondGrade[j];
+      }
+    }
+  }
+}
+
+  // place Service courses ahead of time
+  for(let i = 0; i < lectureHalls.length; i++){
+    // check if an empty classroom is suitable
+    for(let j = 0; j < thirdGrade.length; j++){
+      if(thirdGrade[j].isService == true){
+        // store column info
+        columnIndex = Number(thirdGrade[j].serviceObject.day.description);
+        columnOffset = Number(thirdGrade[j].serviceObject.time.description);
+      // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
+      if((thirdGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
+        || ((thirdGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
+        && (thirdGrade[j].serviceObject.day.description != lectureHalls[i].day.description
+        && thirdGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+          // set properties
+          lectureHalls[i].isSoftOccupied = true;
+          lectureHalls[i].day = thirdGrade[j].serviceObject.day;
+          lectureHalls[i].time = thirdGrade[j].serviceObject.time;
+          thirdGrade[j].currentHall = lectureHalls[i];
+          // place service course in the plan array
+          plan[2][columnIndex + columnOffset] = thirdGrade[j];
+      }
+    }
+  }
+}
+
+  // place Service courses ahead of time
+  for(let i = 0; i < lectureHalls.length; i++){
+    // check if an empty classroom is suitable
+    for(let j = 0; j < fourthGrade.length; j++){
+      if(fourthGrade[j].isService == true){
+        // store column info
+        columnIndex = Number(fourthGrade[j].serviceObject.day.description);
+        columnOffset = Number(fourthGrade[j].serviceObject.time.description);
+      // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
+      if((fourthGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
+        || ((fourthGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
+        && (fourthGrade[j].serviceObject.day.description != lectureHalls[i].day.description
+        && fourthGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+          // set properties
+          lectureHalls[i].isSoftOccupied = true;
+          lectureHalls[i].day = fourthGrade[j].serviceObject.day;
+          lectureHalls[i].time = fourthGrade[j].serviceObject.time;
+          fourthGrade[j].currentHall = lectureHalls[i];
+          // place service course in the plan array
+          plan[3][columnIndex + columnOffset] = fourthGrade[j];
+      }
+    }
+  }
+}
   
     
-  console.log(lectureHalls);
+
   console.log(firstGrade);
   console.log(secondGrade);
   console.log(thirdGrade);
   console.log(fourthGrade);
+  console.table(plan);
+  console.log(lectureHalls);
 
 
 
@@ -360,7 +440,19 @@ async function readFile() {
                     boolarray[2] = false;
                   }
                   console.log("busy.csv")
-                  if(assignArrayToInstructorObject(csvarray[i], i)){
+                  if(instructors && instructors.length){
+                    var personExists = false;
+                    for(let j = 0; j < instructors.length; j++){
+                      if(typeof(instructors[j]) !== 'undefined'){
+                        if(instructors[j].name == csvarray[i][0]){
+                          personExists = true;
+                          instructors[j].day = instructors[j].day + " " + csvarray[i][1];
+                          instructors[j].time = instructors[j].time + " " + csvarray[i][1];
+                        }
+                      }
+                    }
+                  }
+                  if(!personExists && assignArrayToInstructorObject(csvarray[i], i)){
                     if(boolarray2[2]){
                       cnt = cnt + 1;
                       boolarray2[2] = false;
@@ -387,12 +479,16 @@ async function readFile() {
             }
     
           }
-  
+          // clean up instructors array
+          instructors = instructors.filter(function(x) {
+            return x !== undefined;
+        });
+        /*
           console.log(serviceCourses);
           console.log(courses);
           console.log(instructors);
           console.log(lectureHalls);
-          console.log(cnt)
+          */
           // reset variables
           boolarray[0] = true;
           boolarray[1] = true;

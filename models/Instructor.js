@@ -14,7 +14,7 @@ class Instructor {
 
   // override toString, console.log() does not automatically call this method so you need to explicitly call it.
   toString() {
-    return `Instructor ${this.name} is Busy on ${this.day.description} ${this.time.description}`;
+    return `Instructor ${this.name} is Busy on ${this.day} ${this.time}`;
   }
 }
 
