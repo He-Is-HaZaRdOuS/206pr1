@@ -117,53 +117,12 @@ function assignArrayToCourseObject(array, index) {
 
 function assignArrayToInstructorObject(array, index) {
   // check if 1st and 2nd index of array matches enums using if-else and ternary operations
-  if (array[1] == validDays.Monday.description) {
-    instructors[index] = new Instructor(
-      array[0],
-      validDays.Monday.description,
-      array[2] == validTimes.Morning.description
-        ? validTimes.Morning.description
-        : validTimes.Afternoon.description
-    );
+  let day = [];
+  let time = [];
+  day.push(array[1]);
+  time.push(array[2]);
+    instructors[index] = new Instructor(array[0], day, time);
     return true;
-  } else if (array[1] == validDays.Tuesday.description) {
-    instructors[index] = new Instructor(
-      array[0],
-      validDays.Tuesday.description,
-      array[2] == validTimes.Morning.description
-        ? validTimes.Morning.description
-        : validTimes.Afternoon.description
-    );
-    return true;
-  } else if (array[1] == validDays.Wednesday.description) {
-    instructors[index] = new Instructor(
-      array[0],
-      validDays.Wednesday.description,
-      array[2] == validTimes.Morning.description
-        ? validTimes.Morning.description
-        : validTimes.Afternoon.description
-    );
-    return true;
-  } else if (array[1] == validDays.Thursday.description) {
-    instructors[index] = new Instructor(
-      array[0],
-      validDays.Thursday.description,
-      array[2] == validTimes.Morning.description
-        ? validTimes.Morning.description
-        : validTimes.Afternoon.description
-    );
-    return true;
-  } else if (array[1] == validDays.Friday.description) {
-    instructors[index] = new Instructor(
-      array[0],
-      validDays.Friday.description,
-      array[2] == validTimes.Morning.description
-        ? validTimes.Morning.description
-        : validTimes.Afternoon.description
-    );
-    return true;
-  }
-
   //console.log(instructors);
 }
 
@@ -281,7 +240,7 @@ function coursePlannerAlgorithm(){
         if((firstGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
           || ((firstGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
           && (firstGrade[j].serviceObject.day.description != lectureHalls[i].day.description
-          && firstGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+          || firstGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
             // set properties
             lectureHalls[i].isSoftOccupied = true;
             lectureHalls[i].day = firstGrade[j].serviceObject.day;
@@ -306,7 +265,7 @@ function coursePlannerAlgorithm(){
       if((secondGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
         || ((secondGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
         && (secondGrade[j].serviceObject.day.description != lectureHalls[i].day.description
-        && secondGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+        || secondGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
           // set properties
           lectureHalls[i].isSoftOccupied = true;
           lectureHalls[i].day = secondGrade[j].serviceObject.day;
@@ -331,7 +290,7 @@ function coursePlannerAlgorithm(){
       if((thirdGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
         || ((thirdGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
         && (thirdGrade[j].serviceObject.day.description != lectureHalls[i].day.description
-        && thirdGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+        || thirdGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
           // set properties
           lectureHalls[i].isSoftOccupied = true;
           lectureHalls[i].day = thirdGrade[j].serviceObject.day;
@@ -356,7 +315,7 @@ function coursePlannerAlgorithm(){
       if((fourthGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
         || ((fourthGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true)
         && (fourthGrade[j].serviceObject.day.description != lectureHalls[i].day.description
-        && fourthGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
+        || fourthGrade[j].serviceObject.time.description != lectureHalls[i].time.description))){
           // set properties
           lectureHalls[i].isSoftOccupied = true;
           lectureHalls[i].day = fourthGrade[j].serviceObject.day;
@@ -446,8 +405,8 @@ async function readFile() {
                       if(typeof(instructors[j]) !== 'undefined'){
                         if(instructors[j].name == csvarray[i][0]){
                           personExists = true;
-                          instructors[j].day = instructors[j].day + " " + csvarray[i][1];
-                          instructors[j].time = instructors[j].time + " " + csvarray[i][1];
+                          instructors[j].day.push(csvarray[i][1]);
+                          instructors[j].time.push(csvarray[i][2]);
                         }
                       }
                     }
@@ -483,6 +442,8 @@ async function readFile() {
           instructors = instructors.filter(function(x) {
             return x !== undefined;
         });
+
+        
         /*
           console.log(serviceCourses);
           console.log(courses);
