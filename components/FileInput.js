@@ -1,38 +1,128 @@
-const FileInput = () => {
-  const modal = document.getElementById("modal");
-  const container = document.createElement("div");
-  container.className = "container";
-  container.id = "cnt";
-  container.style = "display: flex";
-  container.styl;
+import { startReadingFile } from "../Main.js";
+import { generateElement } from "../util/elementGenerator.js";
+import { Modal } from "./Modal.js";
 
-  const row = document.createElement("div");
-  row.className = "row";
+const FileInput = (parameters) => {
+  const fileInput = generateElement("input")
+    .type("file")
+    .accept(".csv")
+    .id("csvFile")
+    .name("filename")
+    .style("display: none")
+    .multiple(true)
+    .build();
 
-  const uploadBtn = document.createElement("button");
-  uploadBtn.className = "icon-btn";
-  uploadBtn.id = "add-row";
-  uploadBtn.title = "add row";
+  const fileStatus = generateElement("div")
+    .appendChild(generateElement("p").innerText("Upload these files:").build())
+    .appendChild(
+      getStatusRow("Lecture Halls: ", parameters.fileStatus.lectureHalls)
+    )
+    .appendChild(
+      getStatusRow("Instructors: ", parameters.fileStatus.instructors)
+    )
+    .appendChild(getStatusRow("Courses: ", parameters.fileStatus.courses))
+    .appendChild(
+      getStatusRow("Service Courses: ", parameters.fileStatus.serviceCourses)
+    )
+    .build();
 
-  const uploadIcon = document.createElement("i");
-  uploadIcon.className = "fa fa-plus";
+  const fileError = generateElement("div")
+    .appendChild(
+      generateElement("p")
+        .innerText("File content does not match!")
+        .style("margin-block-end: 0px;")
+        .build()
+    )
+    .build();
 
-  uploadBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    modal.style.display = "block";
-  });
+  const [modal, toggleModalVis] = Modal(
+    generateElement("div")
+      .className("modal-content")
+      .appendChild(
+        generateElement("h2")
+          .innerText("Select csv files then click upload")
+          .build()
+      )
+      .appendChild(
+        generateElement("p")
+          .innerText(
+            "You should upload 4 csv files: Service Courses, Instructors, Lecture Halls, Courses"
+          )
+          .build()
+      )
+      .appendChild(
+        generateElement("div")
+          .className("modal-btn-container")
+          .appendChild(
+            generateElement("label")
+              .className("modal-btn")
+              .innerText("Select Files")
+              .appendChild(fileInput)
+              .build()
+          )
+          .appendChild(
+            generateElement("button")
+              .className("modal-btn")
+              .id("load-btn")
+              .innerText("Upload")
+              .addEventListener("click", async () => {
+                let result = await startReadingFile(fileInput.files);
+                if (!result) {
+                  toggleModalVis();
+                } else {
+                  fileStatus.appendChild(fileError);
+                }
+              })
+              .build()
+          )
+          .build()
+      )
+      .build()
+  );
 
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
-
-  uploadBtn.appendChild(uploadIcon);
-  row.appendChild(uploadBtn);
-  container.appendChild(row);
+  const container = generateElement("div")
+    .className("container")
+    .id("cnt")
+    .style("display: flex")
+    .appendChild(modal)
+    .appendChild(fileStatus)
+    .appendChild(
+      generateElement("div")
+        .className("row")
+        .appendChild(
+          generateElement("button")
+            .className("icon-btn")
+            .id("add-row")
+            .title("Upload")
+            .addEventListener("click", (e) => {
+              e.preventDefault();
+              toggleModalVis();
+            })
+            .appendChild(generateElement("i").className("fa fa-upload").build())
+            .build()
+        )
+        .build()
+    )
+    .build();
 
   return container;
+};
+
+const getStatusRow = (text, status) => {
+  return generateElement("div")
+    .appendChild(generateElement("a").innerText(text).build())
+    .appendChild(
+      status
+        ? generateElement("i")
+            .className("fa fa-check")
+            .style("color: green;")
+            .build()
+        : generateElement("i")
+            .className("fa fa-ellipsis-h")
+            .style("color: #ea9215;")
+            .build()
+    )
+    .build();
 };
 
 export { FileInput };

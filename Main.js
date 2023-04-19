@@ -2,6 +2,7 @@ import { LectureHall } from "./models/LectureHall.js";
 import { Instructor } from "./models/Instructor.js";
 import { ServiceCourse } from "./models/ServiceCourse.js";
 import { Course } from "./models/Course.js";
+import { getStateCopy, setAppState } from "./App.js";
 
 // final enum for days (pseudo-index)
 const validDaysDigit = Object.freeze({
@@ -501,8 +502,12 @@ for(let i = 0 ; i < lectureHalls.length; i++){
 }
 
 // function is async
-async function readFile() {
-  let file = document.getElementById("csvFile").files[0];
+async function readFile(files) {
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // moved this to FileInput.js
+  //let file = document.getElementById("csvFile").files[0];
+  let file = files[0];
+  let newState;
   // wait for everything inside the below curly braces to finish before returning promise (makes invoking objects/functions wait for this function's completion)
   return new Promise((resolve) => {
     if (file) {
@@ -514,29 +519,42 @@ async function readFile() {
           var hasDigit = /\d/; // regex to match digits
           for (let i = 0; i < arr_len - 1; i++) {
             let sub_len = csvarray[i].length; // know what .csv was uploaded based on sub-array length
-            switch(sub_len){
+            switch (sub_len) {
               case 2:
                 // classroom.csv
-                if(boolarray[0]){
+                if (boolarray[0]) {
                   lectureHalls = new Array(csvarray[i].length);
                   boolarray[0] = false;
                 }
-                console.log("classroom.csv")
+                console.log("classroom.csv");
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // testing the state
+                newState = { ...getStateCopy() };
+                newState.parameters.fileStatus.lectureHalls = true;
+                setAppState(newState);
+
                 if(assignArrayToLectureHallObject(csvarray[i], i)){
                   if(boolarray2[0]){
                     cnt = cnt + 1;
                     boolarray2[0] = false;
                   }
                 }
-  
-              break;
-    
+
+                break;
+
               case 3:
                 // if length 3, then check if first sub-index has digits, if yes then service.csv, if no then busy.csv
                 let bool = hasDigit.test(csvarray[i][0]);
-                if(bool){
+                if (bool) {
                   // service.csv
-                  console.log("service.csv")
+                  console.log("service.csv");
+
+                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                  // testing the state
+                  newState = { ...getStateCopy() };
+                  newState.parameters.fileStatus.serviceCourses = true;
+                  setAppState(newState);
+
                   if(boolarray[1]){
                     serviceCourses = new Array(csvarray[i].length);
                     boolarray[1] = false;
@@ -548,13 +566,20 @@ async function readFile() {
                     }
                   }
                 }
-                else{
+                else {
                   // busy.csv
-                  if(boolarray[2]){
+                  if (boolarray[2]) {
                     instructors = new Array(csvarray[i].length);
                     boolarray[2] = false;
                   }
-                  console.log("busy.csv")
+                  console.log("busy.csv");
+
+                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                  // testing the state
+                  newState = { ...getStateCopy() };
+                  newState.parameters.fileStatus.instructors = true;
+                  setAppState(newState);
+
                   if(instructors && instructors.length){
                     var personExists = false;
                     for(let j = 0; j < instructors.length; j++){
@@ -594,49 +619,59 @@ async function readFile() {
                     }
                   }
                 }
-    
-              break;
-    
+
+                break;
+
               case 8:
                 // courses.csv
-                if(boolarray[3]){
+                if (boolarray[3]) {
                   courses = new Array(csvarray[i].length);
                   boolarray[3] = false;
                 }
-                console.log("courses.csv")
+                console.log("courses.csv");
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // testing the state
+                newState = { ...getStateCopy() };
+                newState.parameters.fileStatus.courses = true;
+                setAppState(newState);
+
                 if(assignArrayToCourseObject(csvarray[i], i)){
                   if(boolarray2[3]){
                     cnt = cnt + 1;
                     boolarray2[3] = false;
                   }
                 }
-              break;
+                break;
             }
-    
           }
+
+          if(personExists){
           // clean up instructors array
           instructors = instructors.filter(function(x) {
             return x !== undefined;
-        });
+          });
+          }
 
-        
-        /*
+
           console.log(serviceCourses);
           console.log(courses);
           console.log(instructors);
           console.log(lectureHalls);
-          */
           // reset variables
           boolarray[0] = true;
           boolarray[1] = true;
           boolarray[2] = true;
           boolarray[3] = true;
-  
+
           if(cnt == 4){
             // invoke algorithm
             coursePlannerAlgorithm();
           }
-          modal.style.display = "none";
+
+          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          // moved this to the FileInput.js
+          //modal.style.display = "none";
+
           // return promise
           resolve("done");
         })
@@ -672,11 +707,17 @@ const loadCSV = async (file) => {
   });
 };
 
-async function startReadingFile() {
-  const wait = await readFile(); // wait for this function call to return promise result
+async function startReadingFile(files) {
+  const wait = await readFile(files); // wait for this function call to return promise result
+  console.log("doneing"); // test async waiting
+  console.log(wait);
+  // return 0 for success
+  return 1;
 }
 
-document.getElementById("load-btn").addEventListener("click", startReadingFile);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// moved this to the FileInput.js, added startReadingFile to the export,
+//document.getElementById("load-btn").addEventListener("click", startReadingFile);
 
 // make below objects public
-export { validDays, validTimes };
+export { validDays, validTimes, startReadingFile };

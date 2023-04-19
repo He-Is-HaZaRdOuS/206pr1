@@ -69,15 +69,21 @@ th {
 }
 
 .modal {
-  display: none;
   position: fixed;
+  display: block;
   left: 0;
   top: 0;
-  padding-top: 150px;
   width: 100%;
   height: 100%;
   z-index: 1;
   background-color: #00000080;
+  padding-top: 150px;
+  animation-name: modal-open;
+  animation-duration: 0.4s;
+}
+
+.invisible {
+  display: none;
 }
 
 .modal-content {
@@ -103,4 +109,17 @@ th {
   display: flex;
   justify-content: space-between;
   height: 32px;
+}
+
+@keyframes modal-open {
+  from {
+    display: none;
+    padding-top: 0px;
+    background-color: transparent;
+  }
+  to {
+    display: block;
+    padding-top: 150px;
+    background-color: #00000080;
+  }
 }
