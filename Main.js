@@ -119,12 +119,45 @@ function assignArrayToInstructorObject(array, index) {
   // check if 1st and 2nd index of array matches enums using if-else and ternary operations
   let day = [];
   let time = [];
-  day.push(array[1]);
-  time.push(array[2]);
+
+  if(array[2] == validTimes.Morning.description){
+    time.push(validTimesDigit.Morning.description);
+  }
+  else{
+    time.push(validTimesDigit.Afternoon.description);
+  }
+
+  if (array[1] == validDays.Monday.description) {
+    day.push(validDaysDigit.Monday.description);
+
     instructors[index] = new Instructor(array[0], day, time);
     return true;
-  //console.log(instructors);
-}
+
+  } else if (array[1] == validDays.Tuesday.description) {
+    day.push(validDaysDigit.Tuesday.description);
+
+    instructors[index] = new Instructor(array[0], day, time);
+    return true;
+
+  } else if (array[1] == validDays.Wednesday.description) {
+    day.push(validDaysDigit.Wednesday.description);
+
+    instructors[index] = new Instructor(array[0], day, time);
+    return true;
+
+  } else if (array[1] == validDays.Thursday.description) {
+    day.push(validDaysDigit.Thursday.description);
+
+    instructors[index] = new Instructor(array[0], day, time);
+    return true;
+
+    } else if (array[1] == validDays.Friday.description) {
+      day.push(validDaysDigit.Friday.description);
+
+      instructors[index] = new Instructor(array[0], day, time);
+      return true;
+    }
+  }
 
 function assignArrayToLectureHallObject(array, index) {
   lectureHalls[index] = new LectureHall(array[0], array[1]);
@@ -141,6 +174,18 @@ function retrieveNumberFromString(str){
 function findYearOfService(array){
   for(let i = 0; i < array.length; i++){
     array[i].year = Math.floor((retrieveNumberFromString(array[i].name) / 100));
+  }
+}
+
+function findInstructor(instructorName){
+  for(let i = 0 ; i < instructors.length; i++)
+  {
+    if(instructorName == instructors[i].name)
+    {
+      return instructors[i];
+    }
+
+    return false;
   }
 }
 
@@ -328,7 +373,118 @@ function coursePlannerAlgorithm(){
   }
 }
   
-    
+
+for(let i = 0 ; i < lectureHalls.length; i++){
+  for(let j = 0 ; j < firstGrade.length; j++){
+    if(firstGrade[j].isService == false){
+      if((firstGrade[j].studentCount <= lectureHalls[i].capacity)){
+        let boolOfInstructor = findInstructor(firstGrade[j].instructorName)
+        let isBusy = true;
+        let slotFound = false;
+        if(boolOfInstructor != false){
+          for(let k = 0; k < boolOfInstructor.day.length; k++){
+            if(typeof(plan[0][k]) === 'undefined' && slotFound == false){
+              let t = k % 2;
+              if(Number(boolOfInstructor.day[k].description) != ((k%2 == 0) ? k : k-1) 
+              && Number(boolOfInstructor.time[k].description) != t){
+                if(Number(lectureHalls[i].day.description) != ((k%2 == 0) ? k : k-1)
+                && Number(lectureHalls[i].time.description) != t){
+                  plan[0][k] = firstGrade[j];
+                  lectureHalls[i].isSoftOccupied = true;
+                  lectureHalls[i].day = k;
+                  lectureHalls[i].time = t;
+                  firstGrade[j].currentHall = lectureHalls[i];
+                  slotFound = true;
+                }
+              } 
+            }
+          }
+        }
+
+        else{
+          for(let k = 0 ; k < plan[0].length; k++)
+          {
+            if(typeof(plan[0][k]) === 'undefined' && slotFound == false)
+            {
+              let t = k % 2;
+              if((lectureHalls[i].isSoftOccupied == false) || (Number(lectureHalls[i].day.description) != ((k%2 == 0) ? k : k-1)
+              && Number(lectureHalls[i].time.description) != t)){    
+              plan[0][k] = firstGrade[j];
+              lectureHalls[i].isSoftOccupied = true;
+              lectureHalls[i].day = (k%2 == 0) ? k : k-1;
+              lectureHalls[i].time = t;
+              firstGrade[j].currentHall = lectureHalls[i];
+              slotFound = true;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*
+for(let i = 0 ; i < lectureHalls.length; i++){
+  for(let j = 0 ; j < secondGrade.length; j++){
+    if(secondGrade[j].isService == false){
+      if((secondGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == false) 
+      || ((secondGrade[j].studentCount <= lectureHalls[i].capacity && lectureHalls[i].isSoftOccupied == true))){
+
+        let boolOfInstructor = findInstructor(secondGrade[j].instructorName)
+        let isBusy = true;
+        let slotFound = false;
+
+        if(boolOfInstructor != false)
+        {
+          for(let k = 0; k < boolOfInstructor.day.length; k++)
+          {
+            if(typeof(plan[1][k]) === 'undefined' && slotFound == false)
+            {
+              let t = k % 2;
+                if(Number(boolOfInstructor.day[k].description) != ((k%2 == 0) ? k : k-1) 
+                && Number(boolOfInstructor.time[k].description) != t)
+                {
+                  plan[1][k] = secondGrade[j];
+                  lectureHalls[i].isSoftOccupied = true;
+                  lectureHalls[i].day = (k%2 == 0) ? k : k-1;
+                  lectureHalls[i].time = t;
+                  secondGrade[j].currentHall = lectureHalls[i];
+                  slotFound = true;
+
+                }
+
+              
+
+              
+            }
+          }
+        }
+
+        else{
+          for(let k = 0 ; k < plan[0].length; k++)
+          {
+            if(typeof(plan[0][k]) === 'undefined' && slotFound == false)
+            {
+              if((lectureHalls.isSoftOccupied == false) || (Number(lectureHalls.day.description) != ((k%2 == 0) ? k : k-1)
+              && Number(lectureHalls.time.description) != t)){
+              let t = k % 2;
+              plan[0][k] = secondGrade[j];
+              lectureHalls[i].isSoftOccupied = true;
+              lectureHalls[i].day = k;
+              lectureHalls[i].time = t;
+              secondGrade[j].currentHall = lectureHalls[i];
+              slotFound = true;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
+*/
 
   console.log(firstGrade);
   console.log(secondGrade);
@@ -405,8 +561,28 @@ async function readFile() {
                       if(typeof(instructors[j]) !== 'undefined'){
                         if(instructors[j].name == csvarray[i][0]){
                           personExists = true;
-                          instructors[j].day.push(csvarray[i][1]);
-                          instructors[j].time.push(csvarray[i][2]);
+                          if(csvarray[i][1] == validDays.Monday.description){
+                            instructors[j].day.push("0");
+                          }
+                          else if(csvarray[i][1] == validDays.Tuesday.description){
+                            instructors[j].day.push("2");
+                          }
+                          else if(csvarray[i][1] == validDays.Wednesday.description){
+                            instructors[j].day.push("4");
+                          }
+                          else if(csvarray[i][1] == validDays.Thursday.description){
+                            instructors[j].day.push("6");
+                          }
+                          else if(csvarray[i][1] == validDays.Friday.description){
+                            instructors[j].day.push("8");
+                          }
+                          
+                          if(csvarray[i][2] == validTimes.Morning.description){
+                            instructors[j].time.push("0");
+                          }
+                          else if(csvarray[i][2] == validTimes.Afternoon.description){
+                            instructors[j].time.push("1");
+                          }
                         }
                       }
                     }
