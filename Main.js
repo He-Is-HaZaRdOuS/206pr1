@@ -176,6 +176,28 @@ function findYearOfService(array){
   }
 }
 
+function addLectureHall(hallInfo)
+{
+  let newHall = hallInfo.split(" ");
+  let number = Number(newHall[0]);
+  let hallName;
+  if(number == false)
+  {
+    number = Number(newHall[1]);
+    hallName = newHall[0];
+  }
+
+  else{
+    hallName = newHall[1];
+  }
+
+  let hallToBeAdded = LectureHall(hallName,number);
+  lectureHalls.push(hallToBeAdded);
+
+  // to be checked!!!!!!
+  coursePlannerAlgorithm(1);
+}
+
 // SPAGHETTI CODE ALERT (sorry for the disappointment)
 function placeServiceCourses(plan, firstGrade, secondGrade, thirdGrade, fourthGrade){
   let columnOffset = Number.MIN_SAFE_INTEGER;
