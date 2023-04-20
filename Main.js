@@ -39,6 +39,7 @@ var serviceCourses;
 var courses;
 var instructors;
 var lectureHalls;
+var wantedCapacity = 0;
 
 var boolarray = [true, true, true, true]; // array to stop the 'for' loop from constantly resetting the object arrays
 var boolarray2 = [true, true, true, true]; // array to increment counter
@@ -175,22 +176,10 @@ function findYearOfService(array){
   }
 }
 
-function findInstructor(instructorName){
-  for(let i = 0 ; i < instructors.length; i++)
-  {
-    if(instructorName == instructors[i].name)
-    {
-      return instructors[i];
-    }
-
-    return false;
-  }
-}
-
 // SPAGHETTI CODE ALERT (sorry for the disappointment)
 function placeServiceCourses(plan, firstGrade, secondGrade, thirdGrade, fourthGrade){
-  var columnOffset = Number.MIN_SAFE_INTEGER;
-  var columnIndex = Number.MIN_SAFE_INTEGER;
+  let columnOffset = Number.MIN_SAFE_INTEGER;
+  let columnIndex = Number.MIN_SAFE_INTEGER;
 
     // place Service courses ahead of time
     for(let j = 0; j < firstGrade.length; j++){
@@ -393,6 +382,47 @@ for(let j = 0; j < fourthGrade.length; j++){
           }
         }
       }
+    }
+  }
+  // end of loops
+
+  for(let x = 0; x < firstGrade.length; x++){
+    if(firstGrade[x].inHall == false){
+      if(wantedCapacity < firstGrade[x].studentCount){
+              wantedCapacity = firstGrade[x].studentCount;
+              console.log("CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED");
+               break; 
+      }    
+    }
+  }
+
+  for(let x = 0; x < secondGrade.length; x++){
+    if(secondGrade[x].inHall == false){
+      if(wantedCapacity < secondGrade[x].studentCount){
+              wantedCapacity = secondGrade[x].studentCount;
+              console.log("CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED");
+               break; 
+      }    
+    }
+  }
+
+  for(let x = 0; x < thirdGrade.length; x++){
+    if(thirdGrade[x].inHall == false){
+      if(wantedCapacity < thirdGrade[x].studentCount){
+              wantedCapacity = thirdGrade[x].studentCount;
+              console.log("CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED");
+               break; 
+      }    
+    }
+  }
+
+  for(let x = 0; x < fourthGrade.length; x++){
+    if(fourthGrade[x].inHall == false){
+      if(wantedCapacity < fourthGrade[x].studentCount){
+              wantedCapacity = fourthGrade[x].studentCount;
+              console.log("CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED");
+               break; 
+      }    
     }
   }
 
@@ -771,13 +801,20 @@ for(let j = 0; j < instructors.length; j++){
       }
     // end of loop
 
+    let toReturn = 0;
+
     for(let x = 0; x < firstGrade.length; x++){
-        if(firstGrade[x].inHall == false){
-          return 1;
-        }
+      if(firstGrade[x].inHall == false){
+        if(wantedCapacity < firstGrade[x].studentCount){
+                wantedCapacity = firstGrade[x].studentCount;
+                toReturn = 1;
+                 return 1;
+        }    
+        return 1;
+      }
     }
 
-    return 0;
+    return toReturn;
 
 }
 
@@ -1151,13 +1188,20 @@ function placeSecondGrade(plan, secondGrade){
       }
       // end of loop
 
+      let toReturn = 0;
+
       for(let x = 0; x < secondGrade.length; x++){
-          if(secondGrade[x].inHall == false){
-            return 2;
+        if(secondGrade[x].inHall == false){
+          if(wantedCapacity < secondGrade[x].studentCount){
+                  wantedCapacity = secondGrade[x].studentCount;
+                  toReturn = 2;
+                   return 2;
+          }   
+          return 2; 
         }
       }
   
-      return 0;
+      return toReturn;
 
 }
 
@@ -1531,14 +1575,20 @@ function placeThirdGrade(plan, thirdGrade){
                 }
                 // end of loop
 
+                let toReturn = 0;
                 
-      for(let x = 0; x < thirdGrade.length; x++){
-          if(thirdGrade[x].inHall == false){
-            return 3;
-        }
-      }
+                for(let x = 0; x < thirdGrade.length; x++){
+                  if(thirdGrade[x].inHall == false){
+                    if(wantedCapacity < thirdGrade[x].studentCount){
+                            wantedCapacity = thirdGrade[x].studentCount;
+                            toReturn = 3;
+                             return 3;
+                    }    
+                    return 3;
+                  }
+                }
   
-      return 0;
+      return toReturn;
 
 }
 
@@ -1912,14 +1962,20 @@ function placeFourthGrade(plan, fourthGrade){
                     }
                     // end of loop
 
+                    let toReturn = 0;
+
                     for(let x = 0; x < fourthGrade.length; x++){
-                        if(fourthGrade[x].inHall == false){
-                          return 4;
-                        
+                      if(fourthGrade[x].inHall == false){
+                        if(wantedCapacity < fourthGrade[x].studentCount){
+                                wantedCapacity = fourthGrade[x].studentCount;
+                                toReturn = 4;
+                                 
+                        }    
+                        return 4;
                       }
                     }
                 
-                    return 0;  
+                    return toReturn;  
 
 }
 
@@ -2089,12 +2145,44 @@ else if(priority == 4){
   console.table(plan);
   console.log(lectureHalls);
 
+  plan.length = 0;
+  /*
+  firstGrade.length = 0;
+  secondGrade.length = 0;
+  thirdGrade.length = 0;
+  fourthGrade.length = 0;
+*/
+
 
 
 
 return flag;
 
 }
+
+function resetLectureHalls(){
+  for(let k = 0; k < lectureHalls.length; k++){
+    lectureHalls[k].isSoftOccupied = false;
+    lectureHalls[k].day = Number.MIN_SAFE_INTEGER;
+    lectureHalls[k].time = Number.MIN_SAFE_INTEGER;
+  }
+}
+
+function resetCourses(){
+  for(let k = 0; k < courses.length; k++){
+    courses[k].inHall = false;
+    courses[k].hasInstructorObject = false;
+    courses[k].instructorObject = null;
+    courses[k].currentHall = null;
+  }
+}
+
+function resetServiceCourses(){
+  for(let k = 0; k < serviceCourses.length; k++){
+    serviceCourses[k].year = 0;
+  }
+}
+
 
 // function is async
 async function readFile(files) {
@@ -2247,6 +2335,8 @@ async function readFile(files) {
           });
           }
 
+          personExists = false;
+
 
           console.log(serviceCourses);
           console.log(courses);
@@ -2258,14 +2348,20 @@ async function readFile(files) {
           boolarray[2] = true;
           boolarray[3] = true;
 
-          var status = 0;
+          let status = 0;
           if(cnt == 4){
             // invoke algorithm
            status = coursePlannerAlgorithm(1);
             if(status != 0){
+              resetLectureHalls();
+              resetCourses();
+              resetServiceCourses();
+
               status = coursePlannerAlgorithm(status);
               if(status != 0){
                 console.log("FAILED TO PLACE SOME COURSES IN GRADE " + status);
+                console.log("CLASSROOM OF SIZE " + wantedCapacity + " NEEDED");
+                console.log("NEED TO TRIGGER DIALOG TO ASK USER TO ADD ANOTHER CLASSROOM WITH ABOVE CAPACITY OR MORE");
               }
             }
           }
