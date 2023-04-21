@@ -1,5 +1,7 @@
-# ignore .csv files
+# ignore irrelevant files in working directory
 ###################
 *.csv
 *.7z
 *.zip
+*.vscode
+
