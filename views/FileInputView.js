@@ -1,8 +1,8 @@
 import { startReadingFile } from "../Main.js";
 import { generateElement } from "../util/elementGenerator.js";
-import { Modal } from "./Modal.js";
+import { Modal } from "../components/Modal.js";
 
-const FileInput = (parameters) => {
+const FileInputView = (parameters) => {
   const fileInput = generateElement("input")
     .type("file")
     .accept(".csv")
@@ -125,4 +125,4 @@ const getStatusRow = (text, status) => {
     .build();
 };
 
-export { FileInput };
+export { FileInputView };
