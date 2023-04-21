@@ -1,9 +1,12 @@
-import { FileInput } from "./components/FileInput.js";
-import { generateElement } from "./util/elementGenerator.js";
+import { FileInputView } from "./views/FileInputView.js";
+import { ErrorView } from "./views/ErrorView.js";
+import { WeeklyPlan } from "./components/WeeklyPlan.js";
 
 const root = document.getElementById("root");
 
-let fileInput;
+let fileInputView;
+let errorView;
+let planView;
 
 // initial state where no file is uploaded
 const appState = {
@@ -37,12 +40,19 @@ const render = () => {
   root.replaceChildren();
   switch (appState.id) {
     case "file-input":
-      fileInput = FileInput(appState.parameters);
-      root.appendChild(fileInput);
+      fileInputView = FileInputView(appState.parameters);
+      root.appendChild(fileInputView);
       break;
     case "plan-generated":
+      // TODO add view
+      root.appendChild(WeeklyPlan("1.Grade", appState.parameters.plan[0]));
+      root.appendChild(WeeklyPlan("2.Grade", appState.parameters.plan[1]));
+      root.appendChild(WeeklyPlan("3.Grade", appState.parameters.plan[2]));
+      root.appendChild(WeeklyPlan("4.Grade", appState.parameters.plan[3]));
       break;
-    case "error":
+    case "classroom-size-error":
+      errorView = ErrorView(appState.parameters);
+      root.appendChild(errorView);
       break;
   }
 };
