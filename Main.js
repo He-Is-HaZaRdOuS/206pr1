@@ -182,6 +182,7 @@ function addLectureHall(hallInfo) {
   // if either one of them is true (if one is a capacity value and another is an id string)
   if (boolIsInteger0 ^ boolIsInteger1) {
     if (boolIsInteger0 === true) {
+      // check if new hall info is not suitable
       if(newHall[0] < wantedCapacity){
         errorString =
         "Please enter a higher capacity number, equal to " + wantedCapacity + " or more";
@@ -192,6 +193,7 @@ function addLectureHall(hallInfo) {
         return [true, errorString];
       }
     } else if (boolIsInteger1 === true) {
+      // check if new hall info is not suitable
       if(newHall[1] < wantedCapacity){
         errorString =
         "Please enter a higher capacity number, equal to " + wantedCapacity + " or more";
