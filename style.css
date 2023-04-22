@@ -306,3 +306,26 @@ ul a:visited {
   margin-top: 5px;
   border-radius: 10px;
 }
+
+table{
+
+  font-family: "Bahnschrift",sans-serif;
+  font-weight: revert;
+  background-color: #bad5fc;
+}
+tbody tr td{
+  border-style: solid;
+}
+thead tr th,#m ,#a{
+  border-style: solid;
+  border-width: revert;
+  font-style: oblique;
+  font-weight: bold;
+  background-color: #023864;
+  color: #cfe2fd;
+  border-color: #023864;
+}
+#first{
+  background-color: #bad5fc;
+  border-style: none;
+}
