@@ -10,7 +10,7 @@ const getNewClassroom = async (message) => {
   const inp = generateElement("input").className("gncInput").build();
   const btn = generateElement("button")
     .className("gncButton")
-    .innerText("add")
+    .innerText("add").id("add")
     .build();
 
   const domObj = popup.appendChild(inp).appendChild(btn).build();
