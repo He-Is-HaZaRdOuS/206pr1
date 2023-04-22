@@ -39,6 +39,10 @@ const generateElement = (type) => {
       element.domObj.type = type;
       return element;
     },
+    src: (src) => {
+      element.domObj.src = src;
+      return element;
+    },
     accept: (accept) => {
       element.domObj.accept = accept;
       return element;

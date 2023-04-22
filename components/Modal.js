@@ -1,18 +1,22 @@
 import { generateElement } from "../util/elementGenerator.js";
 
 const Modal = (modalContent) => {
-  const modal = generateElement("div")
-    .className("modal invisible")
-    .appendChild(modalContent)
-    .build();
+  const modal = generateElement("div").className("modal invisible");
 
   const toggleVis = () => {
-    if (modal.classList.contains("invisible"))
-      modal.classList.remove("invisible");
-    else modal.classList.add("invisible");
+    if (modal.domObj.classList.contains("invisible"))
+      modal.domObj.classList.remove("invisible");
+    else modal.domObj.classList.add("invisible");
   };
 
-  return [modal, toggleVis];
+  const closeBtn = generateElement("button")
+    .innerText("x")
+    .addEventListener("click", toggleVis)
+    .build();
+
+  modal.appendChild(closeBtn).appendChild(modalContent);
+
+  return [modal.build(), toggleVis];
 };
 
 export { Modal };

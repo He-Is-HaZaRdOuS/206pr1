@@ -183,23 +183,25 @@ function addLectureHall(hallInfo) {
   if (boolIsInteger0 ^ boolIsInteger1) {
     if (boolIsInteger0 === true) {
       // check if new hall info is not suitable
-      if(newHall[0] < wantedCapacity){
+      if (newHall[0] < wantedCapacity) {
         errorString =
-        "Please enter a higher capacity number, equal to " + wantedCapacity + " or more";
+          "Please enter a higher capacity number, equal to " +
+          wantedCapacity +
+          " or more";
         return [false, errorString]; // ask user again for inputs
-      }
-      else{
+      } else {
         lectureHalls.push(new LectureHall(newHall[1], newHall[0]));
         return [true, errorString];
       }
     } else if (boolIsInteger1 === true) {
       // check if new hall info is not suitable
-      if(newHall[1] < wantedCapacity){
+      if (newHall[1] < wantedCapacity) {
         errorString =
-        "Please enter a higher capacity number, equal to " + wantedCapacity + " or more";
+          "Please enter a higher capacity number, equal to " +
+          wantedCapacity +
+          " or more";
         return [false, errorString]; // ask user again for inputs
-      }
-      else{
+      } else {
         lectureHalls.push(new LectureHall(newHall[0], newHall[1]));
         return [true, errorString];
       }
@@ -208,7 +210,7 @@ function addLectureHall(hallInfo) {
   // both values were integers or both were non-integers
   else {
     errorString =
-    "The info you entered were invalid, please enter the id and capacity of the classroom";
+      "The info you entered were invalid, please enter the id and capacity of the classroom";
     return [false, errorString]; // ask user again for inputs
   }
 }
@@ -2493,11 +2495,10 @@ function resetServiceCourses() {
 }
 
 // function is async
-async function readFile(files) {
+async function readFile(file) {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // moved this to FileInput.js
   //let file = document.getElementById("csvFile").files[0];
-  let file = files[0];
   let newState;
   // wait for everything inside the below curly braces to finish before returning promise (makes invoking objects/functions wait for this function's completion)
   return new Promise((resolve) => {
@@ -2694,7 +2695,6 @@ async function readFile(files) {
                 let data = await getNewClassroom(errorString);
                 [dataIsValid, errorString] = addLectureHall(data);
                 // if entered data is invalid, then update string and loop till valid lecture hall data is entered
-
               } while (dataIsValid === false);
 
               resetLectureHalls();
@@ -2772,8 +2772,8 @@ const loadCSV = async (file) => {
   });
 };
 
-async function startReadingFile(files) {
-  const wait = await readFile(files); // wait for this function call to return promise result
+async function startReadingFile(file) {
+  const wait = await readFile(file); // wait for this function call to return promise result
   console.log("doneing"); // test async waiting
   console.log(wait);
   // return 0 for success

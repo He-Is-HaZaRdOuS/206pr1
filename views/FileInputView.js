@@ -1,17 +1,9 @@
 import { startReadingFile } from "../Main.js";
 import { generateElement } from "../util/elementGenerator.js";
 import { Modal } from "../components/Modal.js";
+import { AybuLogo } from "../components/AybuLogo.js";
 
 const FileInputView = (parameters) => {
-  const fileInput = generateElement("input")
-    .type("file")
-    .accept(".csv")
-    .id("csvFile")
-    .name("filename")
-    .style("display: none")
-    .multiple(true)
-    .build();
-
   const fileStatus = generateElement("div")
     .appendChild(generateElement("p").innerText("Upload these files:").build())
     .appendChild(
@@ -35,72 +27,58 @@ const FileInputView = (parameters) => {
     )
     .build();
 
-  const [modal, toggleModalVis] = Modal(
-    generateElement("div")
-      .className("modal-content")
-      .appendChild(
-        generateElement("h2")
-          .innerText("Select csv files then click upload")
-          .build()
-      )
-      .appendChild(
-        generateElement("p")
-          .innerText(
-            "You should upload 4 csv files: Service Courses, Instructors, Lecture Halls, Courses"
-          )
-          .build()
-      )
-      .appendChild(
-        generateElement("div")
-          .className("modal-btn-container")
-          .appendChild(
-            generateElement("label")
-              .className("modal-btn")
-              .innerText("Select Files")
-              .appendChild(fileInput)
-              .build()
-          )
-          .appendChild(
-            generateElement("button")
-              .className("modal-btn")
-              .id("load-btn")
-              .innerText("Upload")
-              .addEventListener("click", async () => {
-                let result = await startReadingFile(fileInput.files);
-                if (!result) {
-                  toggleModalVis();
-                } else {
-                  fileStatus.appendChild(fileError);
-                }
-              })
-              .build()
-          )
-          .build()
-      )
-      .build()
-  );
+  const dropZone = generateElement("div")
+    .id("drop-zone")
+    .appendChild(fileStatus);
+
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.domObj.style = "outline-offset: -8px";
+    //https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop
+    if (e.dataTransfer.items) {
+      // Use DataTransferItemList interface to access the file(s)
+      [...e.dataTransfer.items].forEach(async (item, i) => {
+        // If dropped items aren't files, reject them
+        if (
+          item.kind === "file" &&
+          item.getAsFile().name.split(".").slice(-1)[0] == "csv"
+        ) {
+          let result = await startReadingFile(item.getAsFile());
+          if (result != 0) {
+            fileStatus.appendChild(fileError);
+          }
+        }
+      });
+    } else {
+      // Use DataTransfer interface to access the file(s)
+      [...e.dataTransfer.files].forEach(async (file, i) => {
+        if ((file.name.split(".").slice(-1)[0] = "csv")) {
+          let result = await startReadingFile(file);
+          if (result != 0) {
+            fileStatus.appendChild(fileError);
+          }
+        }
+      });
+    }
+  });
+
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.domObj.style = "outline-offset: 2px";
+  });
+
+  dropZone.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    dropZone.domObj.style = "outline-offset: -8px";
+  });
 
   const container = generateElement("div")
-    .className("container")
-    .id("cnt")
-    .style("display: flex")
-    .appendChild(modal)
-    .appendChild(fileStatus)
+    .className("main")
+    .appendChild(AybuLogo())
     .appendChild(
       generateElement("div")
-        .className("row")
-        .appendChild(
-          generateElement("button")
-            .className("icon-btn")
-            .id("add-row")
-            .title("Upload")
-            .addEventListener("click", (e) => {
-              e.preventDefault();
-              toggleModalVis();
-            })
-            .appendChild(generateElement("i").className("fa fa-upload").build())
-            .build()
-        )
+        .className("select")
+        .appendChild(dropZone.build())
         .build()
     )
     .build();
@@ -110,19 +88,31 @@ const FileInputView = (parameters) => {
 
 const getStatusRow = (text, status) => {
   return generateElement("div")
-    .appendChild(generateElement("a").innerText(text).build())
+    .appendChild(generateElement("i").innerText(text).build())
     .appendChild(
       status
         ? generateElement("i")
             .className("fa fa-check")
-            .style("color: green;")
+            .style("color: #023864;")
             .build()
         : generateElement("i")
             .className("fa fa-ellipsis-h")
-            .style("color: #ea9215;")
+            .style("color: #023864;")
             .build()
     )
     .build();
 };
 
 export { FileInputView };
+
+// const appState = {
+//   id: "file-input",
+//   parameters: {
+//     fileStatus: {
+//       courses: false,
+//       instructors: false,
+//       lectureHalls: false,
+//       serviceCourses: false,
+//     },
+//   },
+// };

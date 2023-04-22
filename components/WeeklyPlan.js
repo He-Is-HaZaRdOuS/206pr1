@@ -1,7 +1,7 @@
 import { generateElement } from "../util/elementGenerator.js";
 
 const WeeklyPlan = (title, plan) => {
-  const container = generateElement("div").className("modal-content");
+  const container = generateElement("div");
 
   const table = generateElement("table").appendChild(
     generateElement("thead")
@@ -24,9 +24,21 @@ const WeeklyPlan = (title, plan) => {
     let row = generateElement("tr");
     for (let j = 0; j < 5; j++) {
       let text;
-      if (plan[index]) text = plan[index].code + "\n[" + plan[index].currentHall.id + "]";
-      else text = "       ";
-      row.appendChild(generateElement("td").innerText(text).build());
+      if (plan[index]) {
+        text = plan[index].code + "\n[" + plan[index].currentHall.id + "]";
+        row.appendChild(
+          generateElement("td")
+            .appendChild(
+              generateElement("div")
+                .appendChild(generateElement("p").innerText(text).build())
+                .build()
+            )
+            .build()
+        );
+      } else {
+        text = "       ";
+        row.appendChild(generateElement("td").innerText(text).build());
+      }
       index += 2;
     }
     index = 1;
