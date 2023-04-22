@@ -24,9 +24,9 @@ const WeeklyPlan = (title, plan) => {
     for (let i = 0; i < 2; i++) {
         let row = generateElement("tr");
         if (i == 0) {
-            row.appendChild(generateElement("tr").innerText("Morning").id("m").build());
+            row.appendChild(generateElement("td").innerText("Morning").id("m").build());
         } else {
-            row.appendChild(generateElement("tr").innerText("Afternoon").id("a").build());
+            row.appendChild(generateElement("td").innerText("Afternoon").id("a").build());
         }
         for (let j = 0; j < 5; j++) {
             let text;
