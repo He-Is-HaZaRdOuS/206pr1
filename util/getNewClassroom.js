@@ -9,7 +9,7 @@ const getNewClassroom = async (message) => {
   );
   const inp = generateElement("input").className("gncInput").build();
   const btn = generateElement("button")
-    .className("gncInput")
+    .className("gncButton")
     .innerText("add")
     .build();
 

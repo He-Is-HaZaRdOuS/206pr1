@@ -2691,7 +2691,7 @@ async function readFile(file) {
               errorString += wantedCapacity;
               do {
                 // loop till new data is correct
-
+                console.log("Data is invalid, calling getNewClassroom");
                 let data = await getNewClassroom(errorString);
                 [dataIsValid, errorString] = addLectureHall(data);
                 // if entered data is invalid, then update string and loop till valid lecture hall data is entered

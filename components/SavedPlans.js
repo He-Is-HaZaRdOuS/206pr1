@@ -1,3 +1,4 @@
+import { setAppState, getStateCopy } from "../App.js";
 import { generateElement } from "../util/elementGenerator.js";
 import { storageManager } from "../util/webStorage.js";
 import { Modal } from "./Modal.js";
@@ -13,7 +14,11 @@ const SavedPlans = () => {
     plans.forEach((plan) => {
       list.appendChild(
         listItem(plan.name, () => {
-          console.log(plan.plan);
+          let planState = getStateCopy();
+          planState.id = "plan-generated";
+          planState.parameters.plan = plan.plan;
+          planState.parameters.grade = 0; // show 1. grade plan
+          setAppState(planState);
         })
       );
     });
