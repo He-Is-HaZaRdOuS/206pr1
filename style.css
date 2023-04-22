@@ -202,3 +202,58 @@ ul a:visited {
   outline: #092c74 dashed 2px;
   outline-offset: -8px;
 }
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.modal-content {
+  margin: 10% auto;
+  width: 25%;
+  min-width: 520px;
+  padding: 20px 24px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.modal-title {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-close {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  padding: 1px 4px;
+  border-radius: 6px;
+}
+
+.modal-close:hover {
+  background-color: rgba(0, 0, 0, 0.128);
+}
+
+.list {
+  max-height: 150px;
+  overflow: auto;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  height: 48px;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.list-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

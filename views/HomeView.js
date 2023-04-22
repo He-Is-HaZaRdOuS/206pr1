@@ -1,5 +1,6 @@
 import { getStateCopy, setAppState } from "../App.js";
 import { AybuLogo } from "../components/AybuLogo.js";
+import { SavedPlans } from "../components/SavedPlans.js";
 import { generateElement } from "../util/elementGenerator.js";
 
 const HomeView = (parameters) => {
@@ -23,7 +24,9 @@ const HomeView = (parameters) => {
     .appendChild(
       generateElement("button")
         .innerText("Load a Plan")
-        .addEventListener("click", () => {})
+        .addEventListener("click", () => {
+          page.appendChild(SavedPlans());
+        })
         .build()
     )
     .appendChild(
