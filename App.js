@@ -51,7 +51,7 @@ const render = () => {
           .appendChild(planName)
           .appendChild(
             generateElement("button")
-              .innerText("save")
+              .innerText("save").id("save")
               .addEventListener("click", () => {
                 storageManager.savePlan(
                   planName.value,
@@ -62,7 +62,7 @@ const render = () => {
           )
           .appendChild(
             generateElement("button")
-              .innerText("Go Home")
+              .innerText("Go Home").id("gohome")
               .addEventListener("click", () => {
                 let newState = getStateCopy();
                 newState.id = "home";
