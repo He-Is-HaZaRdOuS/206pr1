@@ -2468,6 +2468,12 @@ function coursePlannerAlgorithm(priority) {
   fourthGrade.length = 0;
 */
 
+          // reset variables
+          boolarray2[0] = true;
+          boolarray2[1] = true;
+          boolarray2[2] = true;
+          boolarray2[3] = true;
+
   return [flag, plan];
 }
 

@@ -1,5 +1,5 @@
 # 206pr1
-This JavaScript program takes input from the user in the form of .csv files containing data delimtied by semicolons and linebreaks,
+This JavaScript program takes input from the user in the form of .csv files containing data delimited by semicolons and linebreaks,
 The data consists of Service Courses, Department Courses, Lecture Halls and Busy times for certain Professors.
 The data is sorted into arrays of objects of their respective classes and relevant objects are nested into other objects in the form of a property.
 The Service Courses precede other Courses so they're placed first inside the schedule array, then Courses with their busy Professors and then regular Courses.
