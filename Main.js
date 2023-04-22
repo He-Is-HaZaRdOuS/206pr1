@@ -3,7 +3,7 @@ import { Instructor } from "./models/Instructor.js";
 import { ServiceCourse } from "./models/ServiceCourse.js";
 import { Course } from "./models/Course.js";
 import { getStateCopy, setAppState } from "./App.js";
-import { getNewClassroom } from "./test.js";
+import { getNewClassroom } from "./util/getNewClassroom.js";
 
 // final enum for days (pseudo-index)
 const validDaysDigit = Object.freeze({

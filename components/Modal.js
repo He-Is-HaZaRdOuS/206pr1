@@ -7,14 +7,17 @@ const Modal = (props) => {
   } else {
     modal.className("modal invisible");
   }
-  const toggleVis = () => {
+  const toggleVis = async () => {
     if (modal.domObj.classList.contains("invisible")) {
       modal.domObj.classList.remove("invisible");
     } else {
       if (props.closeable != null && props.closeable == true) {
         modal.domObj.remove();
       } else {
-        modal.domObj.classList.add("invisible");
+        modal.domObj.firstChild.classList.add("shake");
+        const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+        await sleep(1000);
+        modal.domObj.firstChild.classList.remove("shake");
       }
     }
   };

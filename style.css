@@ -240,8 +240,31 @@ ul a:visited {
   background-color: rgba(0, 0, 0, 0.128);
 }
 
+.shake {
+  animation: shake;
+  animation-duration: 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .list {
-  max-height: 150px;
+  max-height: 300px;
   overflow: auto;
 }
 
@@ -256,4 +279,30 @@ ul a:visited {
 
 .list-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: #0a5da0;
+  border-radius: 10px;
+  height: 70px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list::-webkit-scrollbar-track-piece:end {
+  background: #bad5fc;
+  margin-bottom: 5px;
+  border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-track-piece:start {
+  background: #bad5fc;
+  margin-top: 5px;
+  border-radius: 10px;
 }

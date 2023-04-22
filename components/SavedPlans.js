@@ -7,7 +7,7 @@ const SavedPlans = () => {
   const list = generateElement("div").className("list");
   if (plans.length == 0) {
     list.appendChild(
-      generateElement("i").innerText("You haven't saved any plans yet")
+      generateElement("i").innerText("You haven't saved any plans yet").build()
     );
   } else {
     plans.forEach((plan) => {
@@ -30,7 +30,6 @@ const SavedPlans = () => {
 };
 
 const listItem = (name, callback) => {
-  console.log(callback);
   return generateElement("div")
     .className("list-item")
     .appendChild(generateElement("i").innerText(name).build())
