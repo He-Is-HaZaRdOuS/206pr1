@@ -5,6 +5,10 @@ import { Course } from "./models/Course.js";
 import { getStateCopy, setAppState } from "./App.js";
 import { getNewClassroom } from "./util/getNewClassroom.js";
 
+// the below four symbol objects declarations are meant to be used as enumerations
+// to make recognizing day and time values easier and use them directly as integers
+// to compare and place courses into the plan array directly
+
 // final enum for days (pseudo-index)
 const validDaysDigit = Object.freeze({
   Monday: Symbol("0"),
@@ -43,14 +47,28 @@ var lectureHalls;
 var wantedCapacity = 0;
 var errorString;
 
-var boolarray = [true, true, true, true]; // array to stop the 'for' loop from constantly resetting the object arrays
-var boolarray2 = [true, true, true, true]; // array to increment counter
+var boolReadOnce = [true, true, true, true]; // array to stop the 'for' loop from constantly resetting the object arrays
+var boolIncrementOnce = [true, true, true, true]; // array to increment counter once
 var csvarray = []; // array to store loadCSV result
 var cnt = 0; // counter
 var hasDigit = /\d/; // regex to match digits in a string
 var isInteger = /^\d+$/; // regex to check if a string has only digits
 
+// fill array with service courses
 function assignArrayToServiceObject(array, index) {
+
+  if(array.length != 3){
+    console.log("INVALID DATA READ FROM COURSES.CSV");
+    return false; // data is invalid
+  }
+
+  for(let i = 0; i < array.length; i++){
+    if(typeof array[i] === "undefined"){
+      console.log("INVALID DATA READ FROM SERVICE.CSV");
+      return false; // data is invalid
+    }
+  }
+
   // check if 1st and 2nd index of array matches enums using if-else and ternary operations
   if (array[1] == validDays.Monday.description) {
     serviceCourses[index] = new ServiceCourse(
@@ -99,10 +117,24 @@ function assignArrayToServiceObject(array, index) {
     return true;
   }
 
-  //console.log(serviceCourses);
+  return false; // data is invalid
 }
 
+// fill array with courses
 function assignArrayToCourseObject(array, index) {
+  if(array.length != 8){
+    console.log("INVALID DATA READ FROM COURSES.CSV");
+    return false; // data is invalid
+  }
+
+  for(let i = 0; i < array.length; i++){
+    if(typeof array[i] === "undefined"){
+      console.log("INVALID DATA READ FROM COURSES.CSV");
+      return false; // data is invalid
+    }
+  }
+
+  // data is valid, proceed
   courses[index] = new Course(
     array[0],
     array[1],
@@ -114,14 +146,26 @@ function assignArrayToCourseObject(array, index) {
     array[7]
   );
   return true;
-  //console.log(courses);
 }
 
 function assignArrayToInstructorObject(array, index) {
-  // check if 1st and 2nd index of array matches enums using if-else and ternary operations
+  if(array.length != 3){
+    console.log("INVALID DATA READ FROM COURSES.CSV");
+    return false; // data is invalid
+  }
+
+  for(let i = 0; i < array.length; i++){
+    if(typeof array[i] === "undefined"){
+      console.log("INVALID DATA READ FROM BUSY.CSV");
+      return false; // data is invalid
+    }
+  }
+
+  // variables
   let day = [];
   let time = [];
 
+  // check if 1st and 2nd index of array matches enums using if-else and ternary operations
   if (array[2] == validTimes.Morning.description) {
     time.push(validTimesDigit.Morning.description);
   } else {
@@ -130,54 +174,77 @@ function assignArrayToInstructorObject(array, index) {
 
   if (array[1] == validDays.Monday.description) {
     day.push(validDaysDigit.Monday.description);
-
     instructors[index] = new Instructor(array[0], day, time);
     return true;
+
   } else if (array[1] == validDays.Tuesday.description) {
     day.push(validDaysDigit.Tuesday.description);
-
     instructors[index] = new Instructor(array[0], day, time);
     return true;
+
   } else if (array[1] == validDays.Wednesday.description) {
     day.push(validDaysDigit.Wednesday.description);
-
     instructors[index] = new Instructor(array[0], day, time);
     return true;
+
   } else if (array[1] == validDays.Thursday.description) {
     day.push(validDaysDigit.Thursday.description);
-
     instructors[index] = new Instructor(array[0], day, time);
     return true;
+
   } else if (array[1] == validDays.Friday.description) {
     day.push(validDaysDigit.Friday.description);
-
     instructors[index] = new Instructor(array[0], day, time);
     return true;
   }
+
+  return false; // data is invalid
 }
+
 
 function assignArrayToLectureHallObject(array, index) {
+
+  if(array.length != 2){
+    console.log("INVALID DATA READ FROM COURSES.CSV");
+    return false; // data is invalid
+  }
+
+  for(let i = 0; i < array.length; i++){
+    if(typeof array[i] === "undefined"){
+      console.log("INVALID DATA READ FROM CLASSROOM.CSV");
+      return false; // data is invalid
+    }
+  }
+
   lectureHalls[index] = new LectureHall(array[0], array[1]);
-  return true;
-  //console.log(lectureHalls);
+  return true;  // data is valid
 }
 
+// get integer from an alphanumeric string
 function retrieveNumberFromString(str) {
   let newstr = str.replace(/\D/g, "");
   let num = Number(newstr);
   return num;
 }
 
+// find grade of service courses from their course code
 function findYearOfService(array) {
   for (let i = 0; i < array.length; i++) {
     array[i].year = Math.floor(retrieveNumberFromString(array[i].name) / 100);
   }
 }
 
+// create and insert a new lecture hall object when needed
 function addLectureHall(hallInfo) {
   let newHall = hallInfo.split(" ");
   let boolIsInteger0 = isInteger.test(newHall[0]);
   let boolIsInteger1 = isInteger.test(newHall[1]);
+
+  // if more or less arguments than 2, ask user for inputs again
+  if(newHall.length != 2){
+    errorString = "Invalid number of arguments, please enter only two arguments containing classroom id and capacity"
+    return [false, errorString]; // ask user again for inputs
+  }
 
   // if either one of them is true (if one is a capacity value and another is an id string)
   if (boolIsInteger0 ^ boolIsInteger1) {
@@ -189,11 +256,13 @@ function addLectureHall(hallInfo) {
           wantedCapacity +
           " or more";
         return [false, errorString]; // ask user again for inputs
-      } else {
+      } 
+      else {
         lectureHalls.push(new LectureHall(newHall[1], newHall[0]));
         return [true, errorString];
       }
-    } else if (boolIsInteger1 === true) {
+    } 
+    else if (boolIsInteger1 === true) {
       // check if new hall info is not suitable
       if (newHall[1] < wantedCapacity) {
         errorString =
@@ -201,12 +270,14 @@ function addLectureHall(hallInfo) {
           wantedCapacity +
           " or more";
         return [false, errorString]; // ask user again for inputs
-      } else {
+      }
+      else {
         lectureHalls.push(new LectureHall(newHall[0], newHall[1]));
         return [true, errorString];
       }
     }
   }
+  
   // both values were integers or both were non-integers
   else {
     errorString =
@@ -215,6 +286,7 @@ function addLectureHall(hallInfo) {
   }
 }
 
+// below functions places service courses in their respective time slots
 // SPAGHETTI CODE ALERT (sorry for the disappointment)
 function placeServiceCourses(
   plan,
@@ -222,7 +294,9 @@ function placeServiceCourses(
   secondGrade,
   thirdGrade,
   fourthGrade
-) {
+)
+ {
+  // variables
   let columnOffset = Number.MIN_SAFE_INTEGER;
   let columnIndex = Number.MIN_SAFE_INTEGER;
 
@@ -525,8 +599,9 @@ function placeServiceCourses(
   }
   // end of loops
 
+  // check if all service courses were placed
   for (let x = 0; x < firstGrade.length; x++) {
-    if (firstGrade[x].inHall == false) {
+    if (firstGrade[x].inHall == false && firstGrade[x].isService == true) {
       if (wantedCapacity < firstGrade[x].studentCount) {
         wantedCapacity = firstGrade[x].studentCount;
         console.log(
@@ -538,7 +613,7 @@ function placeServiceCourses(
   }
 
   for (let x = 0; x < secondGrade.length; x++) {
-    if (secondGrade[x].inHall == false) {
+    if (secondGrade[x].inHall == false && secondGrade[x].isService == true) {
       if (wantedCapacity < secondGrade[x].studentCount) {
         wantedCapacity = secondGrade[x].studentCount;
         console.log(
@@ -550,7 +625,7 @@ function placeServiceCourses(
   }
 
   for (let x = 0; x < thirdGrade.length; x++) {
-    if (thirdGrade[x].inHall == false) {
+    if (thirdGrade[x].inHall == false && thirdGrade[x].isService == true) {
       if (wantedCapacity < thirdGrade[x].studentCount) {
         wantedCapacity = thirdGrade[x].studentCount;
         console.log(
@@ -562,7 +637,7 @@ function placeServiceCourses(
   }
 
   for (let x = 0; x < fourthGrade.length; x++) {
-    if (fourthGrade[x].inHall == false) {
+    if (fourthGrade[x].inHall == false && fourthGrade[x].isService == true) {
       if (wantedCapacity < fourthGrade[x].studentCount) {
         wantedCapacity = fourthGrade[x].studentCount;
         console.log(
@@ -576,6 +651,7 @@ function placeServiceCourses(
   // end of function
 }
 
+// below function places non-service first grade courses according to rules
 function placeFirstGrade(plan, firstGrade) {
   // courses with instructors that have busy schedules take precedence
 
@@ -987,6 +1063,7 @@ function placeFirstGrade(plan, firstGrade) {
 
   let toReturn = 0;
 
+  // check if any first grade courses remain unplaced
   for (let x = 0; x < firstGrade.length; x++) {
     if (firstGrade[x].inHall == false) {
       if (wantedCapacity < firstGrade[x].studentCount) {
@@ -1001,6 +1078,7 @@ function placeFirstGrade(plan, firstGrade) {
   return toReturn;
 }
 
+// below function places non-service second grade courses according to rules
 function placeSecondGrade(plan, secondGrade) {
   // start of loop for second grade
   for (let j = 0; j < instructors.length; j++) {
@@ -1410,6 +1488,7 @@ function placeSecondGrade(plan, secondGrade) {
 
   let toReturn = 0;
 
+  // check if any second grade courses remain unplaced
   for (let x = 0; x < secondGrade.length; x++) {
     if (secondGrade[x].inHall == false) {
       if (wantedCapacity < secondGrade[x].studentCount) {
@@ -1424,6 +1503,7 @@ function placeSecondGrade(plan, secondGrade) {
   return toReturn;
 }
 
+// below function places non-service third grade courses according to rules
 function placeThirdGrade(plan, thirdGrade) {
   // start of loop for third grade
   for (let j = 0; j < instructors.length; j++) {
@@ -1833,6 +1913,7 @@ function placeThirdGrade(plan, thirdGrade) {
 
   let toReturn = 0;
 
+  // check if any third grade courses remain unplaced
   for (let x = 0; x < thirdGrade.length; x++) {
     if (thirdGrade[x].inHall == false) {
       if (wantedCapacity < thirdGrade[x].studentCount) {
@@ -1847,6 +1928,7 @@ function placeThirdGrade(plan, thirdGrade) {
   return toReturn;
 }
 
+// below function places non-service fourth grade courses according to rules
 function placeFourthGrade(plan, fourthGrade) {
   // start of loop for fourth grade
   for (let j = 0; j < instructors.length; j++) {
@@ -2256,6 +2338,7 @@ function placeFourthGrade(plan, fourthGrade) {
 
   let toReturn = 0;
 
+  // check if any fourth grade courses remain unplaced
   for (let x = 0; x < fourthGrade.length; x++) {
     if (fourthGrade[x].inHall == false) {
       if (wantedCapacity < fourthGrade[x].studentCount) {
@@ -2269,8 +2352,11 @@ function placeFourthGrade(plan, fourthGrade) {
   return toReturn;
 }
 
+// below function is the pièce de résistance that ties it all together
+// aka the algorithm more or less
 // MORE SPAGHETTI CODE
 function coursePlannerAlgorithm(priority) {
+  // variables
   cnt = 0; // reset counter
   let rows = 4;
   let columns = 10;
@@ -2369,8 +2455,10 @@ function coursePlannerAlgorithm(priority) {
 
   // self-explanatory
   placeServiceCourses(plan, firstGrade, secondGrade, thirdGrade, fourthGrade);
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // if constructing a plan fails, then whichever grade's year failed,
+  // will be passed back as priority argument to this encompassing function to
+  // try and place courses of that year first as a means to avoid the error
   let unplacedYear = 0;
   let flag = 0;
 
@@ -2444,35 +2532,19 @@ function coursePlannerAlgorithm(priority) {
     }
   }
 
+  // need to delete these before submitting
   console.log(firstGrade);
   console.log(secondGrade);
   console.log(thirdGrade);
   console.log(fourthGrade);
   console.table(plan);
-
-  /*
-  let planState = getStateCopy();
-  planState.id = "plan-generated";
-  planState.parameters.plan = plan.concat();
-  planState.parameters.grade = 0; // show 1. grade plan
-  setAppState(planState);
-*/
-
   console.log(lectureHalls);
 
-  //plan.length = 0;
-  /*
-  firstGrade.length = 0;
-  secondGrade.length = 0;
-  thirdGrade.length = 0;
-  fourthGrade.length = 0;
-*/
-
-          // reset variables
-          boolarray2[0] = true;
-          boolarray2[1] = true;
-          boolarray2[2] = true;
-          boolarray2[3] = true;
+  // reset variables
+  boolIncrementOnce[0] = true;
+  boolIncrementOnce[1] = true;
+  boolIncrementOnce[2] = true;
+  boolIncrementOnce[3] = true;
 
   return [flag, plan];
 }
@@ -2500,11 +2572,28 @@ function resetServiceCourses() {
   }
 }
 
+// this is supposed to be called when a user cancels uploading files and wants to go back to the main screen
+function resetVariables(){
+    cnt = 0;
+    instructors.length = 0;
+    serviceCourses.length = 0;
+    courses.length = 0;
+    lectureHalls.length = 0;
+
+    boolReadOnce[0] = true;
+    boolReadOnce[1] = true;
+    boolReadOnce[2] = true;
+    boolReadOnce[3] = true;
+  
+    boolIncrementOnce[0] = true;
+    boolIncrementOnce[1] = true;
+    boolIncrementOnce[2] = true;
+    boolIncrementOnce[3] = true;
+}
+
 // function is async
 async function readFile(file) {
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // moved this to FileInput.js
-  //let file = document.getElementById("csvFile").files[0];
+  
   let newState;
   // wait for everything inside the below curly braces to finish before returning promise (makes invoking objects/functions wait for this function's completion)
   return new Promise((resolve) => {
@@ -2519,9 +2608,9 @@ async function readFile(file) {
             switch (sub_len) {
               case 2:
                 // classroom.csv
-                if (boolarray[0]) {
+                if (boolReadOnce[0]) {
                   lectureHalls = new Array(csvarray[i].length);
-                  boolarray[0] = false;
+                  boolReadOnce[0] = false;
                 }
                 console.log("classroom.csv");
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2531,9 +2620,9 @@ async function readFile(file) {
                 setAppState(newState);
 
                 if (assignArrayToLectureHallObject(csvarray[i], i)) {
-                  if (boolarray2[0]) {
+                  if (boolIncrementOnce[0]) {
                     cnt = cnt + 1;
-                    boolarray2[0] = false;
+                    boolIncrementOnce[0] = false;
                   }
                 }
 
@@ -2552,21 +2641,21 @@ async function readFile(file) {
                   newState.parameters.fileStatus.serviceCourses = true;
                   setAppState(newState);
 
-                  if (boolarray[1]) {
+                  if (boolReadOnce[1]) {
                     serviceCourses = new Array(csvarray[i].length);
-                    boolarray[1] = false;
+                    boolReadOnce[1] = false;
                   }
                   if (assignArrayToServiceObject(csvarray[i], i)) {
-                    if (boolarray2[1]) {
+                    if (boolIncrementOnce[1]) {
                       cnt = cnt + 1;
-                      boolarray2[1] = false;
+                      boolIncrementOnce[1] = false;
                     }
                   }
                 } else {
                   // busy.csv
-                  if (boolarray[2]) {
+                  if (boolReadOnce[2]) {
                     instructors = new Array(csvarray[i].length);
-                    boolarray[2] = false;
+                    boolReadOnce[2] = false;
                   }
                   console.log("busy.csv");
 
@@ -2576,10 +2665,13 @@ async function readFile(file) {
                   newState.parameters.fileStatus.instructors = true;
                   setAppState(newState);
 
+                  // if instructors array exists
                   if (instructors && instructors.length) {
                     var personExists = false;
                     for (let j = 0; j < instructors.length; j++) {
+                      // and if the object is not undefined
                       if (typeof instructors[j] !== "undefined") {
+                        // and if the name is the same, then push busy schedules into existing object
                         if (instructors[j].name == csvarray[i][0]) {
                           personExists = true;
                           if (csvarray[i][1] == validDays.Monday.description) {
@@ -2615,13 +2707,14 @@ async function readFile(file) {
                       }
                     }
                   }
+                  // if no such person exists, then create new object
                   if (
                     !personExists &&
                     assignArrayToInstructorObject(csvarray[i], i)
                   ) {
-                    if (boolarray2[2]) {
+                    if (boolIncrementOnce[2]) {
                       cnt = cnt + 1;
-                      boolarray2[2] = false;
+                      boolIncrementOnce[2] = false;
                     }
                   }
                 }
@@ -2630,9 +2723,9 @@ async function readFile(file) {
 
               case 8:
                 // courses.csv
-                if (boolarray[3]) {
+                if (boolReadOnce[3]) {
                   courses = new Array(csvarray[i].length);
-                  boolarray[3] = false;
+                  boolReadOnce[3] = false;
                 }
                 console.log("courses.csv");
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2642,9 +2735,9 @@ async function readFile(file) {
                 setAppState(newState);
 
                 if (assignArrayToCourseObject(csvarray[i], i)) {
-                  if (boolarray2[3]) {
+                  if (boolIncrementOnce[3]) {
                     cnt = cnt + 1;
-                    boolarray2[3] = false;
+                    boolIncrementOnce[3] = false;
                   }
                 }
                 break;
@@ -2660,36 +2753,23 @@ async function readFile(file) {
 
           personExists = false;
 
+          // delete console.log before submitting
           console.log(serviceCourses);
           console.log(courses);
           console.log(instructors);
           console.log(lectureHalls);
+
           // reset variables
-          boolarray[0] = true;
-          boolarray[1] = true;
-          boolarray[2] = true;
-          boolarray[3] = true;
+          boolReadOnce[0] = true;
+          boolReadOnce[1] = true;
+          boolReadOnce[2] = true;
+          boolReadOnce[3] = true;
 
           if (cnt == 4) {
             // invoke algorithm
             let [flag, plan] = coursePlannerAlgorithm(1);
             // if one course isn't placed in the plan, try to add new classroom
             if (flag != 0) {
-              //   let data = window.prompt(
-              //     "Unsufficient classrooms, please enter id and capacity of atleast " +
-              //       wantedCapacity +
-              //       " seperated by whitespace"
-              //   );
-
-              //let data = await getNewClassroom(wantedCapacity);
-
-              /*
-              let planState = getStateCopy();
-              planState.id = "plan-generated";
-              planState.parameters.plan = plan.concat();
-              planState.parameters.grade = 0; // show 1. grade plan
-              setAppState(planState);
-              */
 
               let dataIsValid = false;
               errorString =
@@ -2714,22 +2794,8 @@ async function readFile(file) {
                 console.log(
                   "NEED TO TRIGGER DIALOG TO ASK USER TO ADD ANOTHER CLASSROOM WITH ABOVE CAPACITY OR MORE"
                 );
-                /*
-                let newState = getStateCopy();
-                newState.id = "classroom-size-error";
-                newState.parameters.errMsg =
-                  "FAILED TO PLACE SOME COURSES IN GRADE " +
-                  status +
-                  "\n" +
-                  "CLASSROOM OF SIZE " +
-                  wantedCapacity +
-                  " NEEDED";
-                // pass current data(?) to be modified,
-                // get user input and re-run the algorithm with the modified data
-                // newState.parameters.data = ...
-                setAppState(newState);
-                */
-              } else {
+              }
+              else {
                 let planState = getStateCopy();
                 planState.id = "plan-generated";
                 planState.parameters.plan = plan.concat();
@@ -2738,10 +2804,6 @@ async function readFile(file) {
               }
             }
           }
-
-          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          // moved this to the FileInput.js
-          //modal.style.display = "none";
 
           // return promise
           resolve("done");
@@ -2785,10 +2847,6 @@ async function startReadingFile(file) {
   // return 0 for success
   return 1;
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// moved this to the FileInput.js, added startReadingFile to the export,
-//document.getElementById("load-btn").addEventListener("click", startReadingFile);
 
 // make below objects public
 export { validDays, validTimes, startReadingFile };
