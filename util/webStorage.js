@@ -12,9 +12,35 @@ const getPlans = () => {
   return plans;
 };
 
+const getState = () => {
+  let state = JSON.parse(window.localStorage.getItem("lastState"));
+  if (state == null || state.id == null || state.id == "file-input") {
+    state = {
+      id: "home",
+      parameters: {
+        grade: 0,
+        plan: null,
+        fileStatus: {
+          lectureHalls: false,
+          instructors: false,
+          courses: false,
+          serviceCourses: false,
+        },
+      },
+    };
+  }
+  return state;
+};
+
+const saveState = (state) => {
+  window.localStorage.setItem("lastState", JSON.stringify(state));
+};
+
 const storageManager = {
   savePlan: savePlan,
   getPlans: getPlans,
+  getState: getState,
+  saveState: saveState,
 };
 
 export { storageManager };

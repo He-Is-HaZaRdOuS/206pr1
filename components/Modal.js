@@ -16,10 +16,14 @@ const Modal = (props) => {
       } else {
         modal.domObj.firstChild.classList.add("shake");
         const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-        await sleep(1000);
+        await sleep(555);
         modal.domObj.firstChild.classList.remove("shake");
       }
     }
+  };
+
+  const remove = () => {
+    modal.domObj.remove();
   };
 
   const closeBtn = generateElement("button")
@@ -42,7 +46,7 @@ const Modal = (props) => {
       .build()
   );
 
-  return [modal.build(), toggleVis];
+  return [modal.build(), toggleVis, remove];
 };
 
 export { Modal };

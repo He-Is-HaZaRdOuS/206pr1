@@ -1,6 +1,5 @@
 import { startReadingFile } from "../Main.js";
 import { generateElement } from "../util/elementGenerator.js";
-import { Modal } from "../components/Modal.js";
 import { AybuLogo } from "../components/AybuLogo.js";
 
 const FileInputView = (parameters) => {
@@ -104,15 +103,3 @@ const getStatusRow = (text, status) => {
 };
 
 export { FileInputView };
-
-// const appState = {
-//   id: "file-input",
-//   parameters: {
-//     fileStatus: {
-//       courses: false,
-//       instructors: false,
-//       lectureHalls: false,
-//       serviceCourses: false,
-//     },
-//   },
-// };

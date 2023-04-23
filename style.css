@@ -336,6 +336,12 @@ table tbody tr td {
     border-style: solid;
 
 }
+
+table {
+    table-layout: fixed;
+    width: 700px;
+}
+
 /*
 tr:hover {
     background-color: #75dede;
@@ -354,4 +360,5 @@ thead tr th, #m, #a {
 #first {
     background-color: #bad5fc;
     border-style: none;
+    color: #023864;
 }
