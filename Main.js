@@ -56,14 +56,13 @@ var isInteger = /^\d+$/; // regex to check if a string has only digits
 
 // fill array with service courses
 function assignArrayToServiceObject(array, index) {
-
-  if(array.length != 3){
+  if (array.length != 3) {
     console.log("INVALID DATA READ FROM COURSES.CSV");
     return false; // data is invalid
   }
 
-  for(let i = 0; i < array.length; i++){
-    if(typeof array[i] === "undefined"){
+  for (let i = 0; i < array.length; i++) {
+    if (typeof array[i] === "undefined") {
       console.log("INVALID DATA READ FROM SERVICE.CSV");
       return false; // data is invalid
     }
@@ -122,13 +121,13 @@ function assignArrayToServiceObject(array, index) {
 
 // fill array with courses
 function assignArrayToCourseObject(array, index) {
-  if(array.length != 8){
+  if (array.length != 8) {
     console.log("INVALID DATA READ FROM COURSES.CSV");
     return false; // data is invalid
   }
 
-  for(let i = 0; i < array.length; i++){
-    if(typeof array[i] === "undefined"){
+  for (let i = 0; i < array.length; i++) {
+    if (typeof array[i] === "undefined") {
       console.log("INVALID DATA READ FROM COURSES.CSV");
       return false; // data is invalid
     }
@@ -149,13 +148,13 @@ function assignArrayToCourseObject(array, index) {
 }
 
 function assignArrayToInstructorObject(array, index) {
-  if(array.length != 3){
+  if (array.length != 3) {
     console.log("INVALID DATA READ FROM COURSES.CSV");
     return false; // data is invalid
   }
 
-  for(let i = 0; i < array.length; i++){
-    if(typeof array[i] === "undefined"){
+  for (let i = 0; i < array.length; i++) {
+    if (typeof array[i] === "undefined") {
       console.log("INVALID DATA READ FROM BUSY.CSV");
       return false; // data is invalid
     }
@@ -176,22 +175,18 @@ function assignArrayToInstructorObject(array, index) {
     day.push(validDaysDigit.Monday.description);
     instructors[index] = new Instructor(array[0], day, time);
     return true;
-
   } else if (array[1] == validDays.Tuesday.description) {
     day.push(validDaysDigit.Tuesday.description);
     instructors[index] = new Instructor(array[0], day, time);
     return true;
-
   } else if (array[1] == validDays.Wednesday.description) {
     day.push(validDaysDigit.Wednesday.description);
     instructors[index] = new Instructor(array[0], day, time);
     return true;
-
   } else if (array[1] == validDays.Thursday.description) {
     day.push(validDaysDigit.Thursday.description);
     instructors[index] = new Instructor(array[0], day, time);
     return true;
-
   } else if (array[1] == validDays.Friday.description) {
     day.push(validDaysDigit.Friday.description);
     instructors[index] = new Instructor(array[0], day, time);
@@ -201,23 +196,21 @@ function assignArrayToInstructorObject(array, index) {
   return false; // data is invalid
 }
 
-
 function assignArrayToLectureHallObject(array, index) {
-
-  if(array.length != 2){
+  if (array.length != 2) {
     console.log("INVALID DATA READ FROM COURSES.CSV");
     return false; // data is invalid
   }
 
-  for(let i = 0; i < array.length; i++){
-    if(typeof array[i] === "undefined"){
+  for (let i = 0; i < array.length; i++) {
+    if (typeof array[i] === "undefined") {
       console.log("INVALID DATA READ FROM CLASSROOM.CSV");
       return false; // data is invalid
     }
   }
 
   lectureHalls[index] = new LectureHall(array[0], array[1]);
-  return true;  // data is valid
+  return true; // data is valid
 }
 
 // get integer from an alphanumeric string
@@ -241,8 +234,9 @@ function addLectureHall(hallInfo) {
   let boolIsInteger1 = isInteger.test(newHall[1]);
 
   // if more or less arguments than 2, ask user for inputs again
-  if(newHall.length != 2){
-    errorString = "Invalid number of arguments, please enter only two arguments containing classroom id and capacity"
+  if (newHall.length != 2) {
+    errorString =
+      "Invalid number of arguments, please enter only two arguments containing classroom id and capacity";
     return [false, errorString]; // ask user again for inputs
   }
 
@@ -256,13 +250,11 @@ function addLectureHall(hallInfo) {
           wantedCapacity +
           " or more";
         return [false, errorString]; // ask user again for inputs
-      } 
-      else {
+      } else {
         lectureHalls.push(new LectureHall(newHall[1], newHall[0]));
         return [true, errorString];
       }
-    } 
-    else if (boolIsInteger1 === true) {
+    } else if (boolIsInteger1 === true) {
       // check if new hall info is not suitable
       if (newHall[1] < wantedCapacity) {
         errorString =
@@ -270,14 +262,13 @@ function addLectureHall(hallInfo) {
           wantedCapacity +
           " or more";
         return [false, errorString]; // ask user again for inputs
-      }
-      else {
+      } else {
         lectureHalls.push(new LectureHall(newHall[0], newHall[1]));
         return [true, errorString];
       }
     }
   }
-  
+
   // both values were integers or both were non-integers
   else {
     errorString =
@@ -294,8 +285,7 @@ function placeServiceCourses(
   secondGrade,
   thirdGrade,
   fourthGrade
-)
- {
+) {
   // variables
   let columnOffset = Number.MIN_SAFE_INTEGER;
   let columnIndex = Number.MIN_SAFE_INTEGER;
@@ -2573,27 +2563,26 @@ function resetServiceCourses() {
 }
 
 // this is supposed to be called when a user cancels uploading files and wants to go back to the main screen
-function resetVariables(){
-    cnt = 0;
-    instructors.length = 0;
-    serviceCourses.length = 0;
-    courses.length = 0;
-    lectureHalls.length = 0;
+function resetVariables() {
+  if (cnt != null) cnt = 0;
+  if (instructors != null) instructors.length = 0;
+  if (serviceCourses != null) serviceCourses.length = 0;
+  if (courses != null) courses.length = 0;
+  if (lectureHalls != null) lectureHalls.length = 0;
 
-    boolReadOnce[0] = true;
-    boolReadOnce[1] = true;
-    boolReadOnce[2] = true;
-    boolReadOnce[3] = true;
-  
-    boolIncrementOnce[0] = true;
-    boolIncrementOnce[1] = true;
-    boolIncrementOnce[2] = true;
-    boolIncrementOnce[3] = true;
+  boolReadOnce[0] = true;
+  boolReadOnce[1] = true;
+  boolReadOnce[2] = true;
+  boolReadOnce[3] = true;
+
+  boolIncrementOnce[0] = true;
+  boolIncrementOnce[1] = true;
+  boolIncrementOnce[2] = true;
+  boolIncrementOnce[3] = true;
 }
 
 // function is async
 async function readFile(file) {
-  
   let newState;
   // wait for everything inside the below curly braces to finish before returning promise (makes invoking objects/functions wait for this function's completion)
   return new Promise((resolve) => {
@@ -2770,7 +2759,6 @@ async function readFile(file) {
             let [flag, plan] = coursePlannerAlgorithm(1);
             // if one course isn't placed in the plan, try to add new classroom
             if (flag != 0) {
-
               let dataIsValid = false;
               errorString =
                 "Unsufficient classrooms, please enter id and capacity of atleast "; // pass this string to getNewClassroom(); function
@@ -2794,8 +2782,7 @@ async function readFile(file) {
                 console.log(
                   "NEED TO TRIGGER DIALOG TO ASK USER TO ADD ANOTHER CLASSROOM WITH ABOVE CAPACITY OR MORE"
                 );
-              }
-              else {
+              } else {
                 let planState = getStateCopy();
                 planState.id = "plan-generated";
                 planState.parameters.plan = plan.concat();
@@ -2849,4 +2836,4 @@ async function startReadingFile(file) {
 }
 
 // make below objects public
-export { validDays, validTimes, startReadingFile };
+export { validDays, validTimes, startReadingFile, resetVariables };

@@ -1,6 +1,7 @@
-import { startReadingFile } from "../Main.js";
+import { resetVariables, startReadingFile } from "../Main.js";
 import { generateElement } from "../util/elementGenerator.js";
 import { AybuLogo } from "../components/AybuLogo.js";
+import { getStateCopy, setAppState } from "../App.js";
 
 const FileInputView = (parameters) => {
   const fileStatus = generateElement("div")
@@ -71,6 +72,23 @@ const FileInputView = (parameters) => {
     dropZone.domObj.style = "outline-offset: -8px";
   });
 
+  const cancelButton = generateElement("button")
+    .id("gohome")
+    .innerText("Cancel")
+    .addEventListener("click", () => {
+      resetVariables();
+      let newState = getStateCopy();
+      newState.id = "home";
+      newState.parameters.fileStatus = {
+        lectureHalls: false,
+        instructors: false,
+        courses: false,
+        serviceCourses: false,
+      };
+      setAppState(newState);
+    })
+    .build();
+
   const container = generateElement("div")
     .className("main")
     .appendChild(AybuLogo())
@@ -78,6 +96,12 @@ const FileInputView = (parameters) => {
       generateElement("div")
         .className("select")
         .appendChild(dropZone.build())
+        .build()
+    )
+    .appendChild(
+      generateElement("div")
+        .style("display: flex; justify-content: space-around")
+        .appendChild(cancelButton)
         .build()
     )
     .build();
