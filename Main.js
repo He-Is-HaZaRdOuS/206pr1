@@ -945,18 +945,17 @@ function placeGradeCourses(plan, grade, index){
   // end of loop
 
 
+/*
+  grade.sort((obj1, obj2) =>
+  obj1.credit < obj2.credit
+    ? 1
+    : obj1.credit > obj2.credit
+    ? -1
+    : 0
+);
 
 
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
@@ -967,10 +966,10 @@ function placeGradeCourses(plan, grade, index){
       for (let k = 0; k < grade.length; k++) {
         if (
           grade[k].hasInstructorObject == false &&
-          grade[k].isService == false
+          grade[k].isService == false && grade[k].isCompulsory == true
         ) {
           if (grade[k].studentCount <= lectureHalls[i].capacity) {
-            for (let p = 0; p < plan[index].length; p++) {
+            for (let p = plan[index].length -1; p >= 0; p--) {
               if (
                 typeof plan[index][p] == "undefined" &&
                 grade[k].inHall == false
@@ -1092,6 +1091,138 @@ function placeGradeCourses(plan, grade, index){
       }
     }
     // end of loop
+
+
+        // now place courses without instructors' busy schedules
+        for (let i = 0; i < lectureHalls.length; i++) {
+          for (let k = 0; k < grade.length; k++) {
+            if (
+              grade[k].hasInstructorObject == false &&
+              grade[k].isService == false && grade[k].isCompulsory == false
+            ) {
+              if (grade[k].studentCount <= lectureHalls[i].capacity) {
+                for (let p = 0; p < plan[index].length; p++) {
+                  if (
+                    typeof plan[index][p] == "undefined" &&
+                    grade[k].inHall == false
+                  ) {
+                    if (
+                      lectureHalls[i].isSoftOccupied == false ||
+                      (lectureHalls[i].isSoftOccupied == true &&
+                        p != lectureHalls[i].day + lectureHalls[i].time)
+                    ) {
+                      if (typeof plan[i1][p] != "undefined") {
+                        if (typeof plan[i2][p] != "undefined") {
+                          if (typeof plan[i3][p] != "undefined") {
+                            if (
+                              plan[i1][p].currentHall.id != lectureHalls[i].id &&
+                              plan[i2][p].currentHall.id != lectureHalls[i].id &&
+                              plan[i3][p].currentHall.id != lectureHalls[i].id
+                            ) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          } else {
+                            if (
+                              plan[i1][p].currentHall.id != lectureHalls[i].id &&
+                              plan[i2][p].currentHall.id != lectureHalls[i].id
+                            ) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          }
+                        } else {
+                          if (typeof plan[i3][p] != "undefined") {
+                            if (
+                              plan[i1][p].currentHall.id != lectureHalls[i].id &&
+                              plan[i3][p].currentHall.id != lectureHalls[i].id
+                            ) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          } else {
+                            if (plan[i1][p].currentHall.id != lectureHalls[i].id) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          }
+                        }
+                      } else {
+                        if (typeof plan[i2][p] != "undefined") {
+                          if (typeof plan[i3][p] != "undefined") {
+                            if (
+                              plan[i2][p].currentHall.id != lectureHalls[i].id &&
+                              plan[i3][p].currentHall.id != lectureHalls[i].id
+                            ) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          } else {
+                            if (plan[i2][p].currentHall.id != lectureHalls[i].id) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          }
+                        } else {
+                          if (typeof plan[i3][p] != "undefined") {
+                            if (plan[i3][p].currentHall.id != lectureHalls[i].id) {
+                              // set properties
+                              plan[index][p] = grade[k];
+                              lectureHalls[i].isSoftOccupied = true;
+                              lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                              lectureHalls[i].time = p % 2;
+                              grade[k].currentHall = lectureHalls[i];
+                              grade[k].inHall = true;
+                            }
+                          } else {
+                            // set properties
+                            plan[index][p] = grade[k];
+                            lectureHalls[i].isSoftOccupied = true;
+                            lectureHalls[i].day = p % 2 == 0 ? p : p - 1;
+                            lectureHalls[i].time = p % 2;
+                            grade[k].currentHall = lectureHalls[i];
+                            grade[k].inHall = true;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        // end of loop
 
 
 
