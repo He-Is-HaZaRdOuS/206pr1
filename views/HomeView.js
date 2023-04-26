@@ -39,6 +39,14 @@ const HomeView = (parameters) => {
         })
         .build()
     )
+    .appendChild(
+      generateElement("button")
+        .innerText("Click to Instantly pass CENG206")
+        .addEventListener("click", () => {
+          window.location.href = "https://shattereddisk.github.io/rickroll/rickroll.mp4";
+        })
+        .build()
+    )
     .build();
 
   page.appendChild(AybuLogo()).appendChild(middle).appendChild(btnArea);
