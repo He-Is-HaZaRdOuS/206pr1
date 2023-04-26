@@ -1718,6 +1718,13 @@ async function readFile(file) {
                 setAppState(planState);
               }
             }
+            else{
+              let planState = getStateCopy();
+                planState.id = "plan-generated";
+                planState.parameters.plan = plan.concat();
+                planState.parameters.grade = 0; // show 1. grade plan
+                setAppState(planState);
+            }
           }
 
           // return promise
