@@ -9,7 +9,7 @@ import { getNewClassroom } from "./util/getNewClassroom.js";
 // to make recognizing day and time values easier and use them directly as integers
 // to compare and place courses into the plan array directly
 
-// final enum for days (pseudo-index)
+// final enum for days (pseudo-index) Immutable
 const validDaysDigit = Object.freeze({
   Monday: Symbol("0"),
   Tuesday: Symbol("2"),
@@ -18,13 +18,13 @@ const validDaysDigit = Object.freeze({
   Friday: Symbol("8"),
 });
 
-// final enum for times of the day (pseudo-index)
+// final enum for times of the day (pseudo-index) Immutable
 const validTimesDigit = Object.freeze({
   Morning: Symbol("0"),
   Afternoon: Symbol("1"),
 });
 
-// final enum for days (pseudo-index)
+// final enum for days (pseudo-index) Immutable
 const validDays = Object.freeze({
   Monday: Symbol("Monday"),
   Tuesday: Symbol("Tuesday"),
@@ -33,7 +33,7 @@ const validDays = Object.freeze({
   Friday: Symbol("Friday"),
 });
 
-// final enum for times of the day (pseudo-index)
+// final enum for times of the day (pseudo-index) Immutable
 const validTimes = Object.freeze({
   Morning: Symbol("Morning"),
   Afternoon: Symbol("Afternoon"),
@@ -44,11 +44,11 @@ var serviceCourses;
 var courses;
 var instructors;
 var lectureHalls;
-var wantedCapacity = 0;
-var errorString;
+var wantedCapacity = 0; // this is used to keep track of the largest needed classroom
+var errorString;  // this is used to display error messages to the user
 
 var boolReadOnce = [true, true, true, true]; // array to stop the 'for' loop from constantly resetting the object arrays
-var boolIncrementOnce = [true, true, true, true]; // array to increment counter once
+var boolIncrementOnce = [true, true, true, true]; // array to increment counter once (for activating the algorithm)
 var csvarray = []; // array to store loadCSV result
 var cnt = 0; // counter
 var hasDigit = /\d/; // regex to match digits in a string
@@ -594,9 +594,11 @@ function placeServiceCourses(
     if (firstGrade[x].inHall == false && firstGrade[x].isService == true) {
       if (wantedCapacity < firstGrade[x].studentCount) {
         wantedCapacity = firstGrade[x].studentCount;
+        /*
         console.log(
           "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
         );
+        */
         break;
       }
     }
@@ -606,9 +608,11 @@ function placeServiceCourses(
     if (secondGrade[x].inHall == false && secondGrade[x].isService == true) {
       if (wantedCapacity < secondGrade[x].studentCount) {
         wantedCapacity = secondGrade[x].studentCount;
+        /*
         console.log(
           "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
         );
+        */
         break;
       }
     }
@@ -618,9 +622,11 @@ function placeServiceCourses(
     if (thirdGrade[x].inHall == false && thirdGrade[x].isService == true) {
       if (wantedCapacity < thirdGrade[x].studentCount) {
         wantedCapacity = thirdGrade[x].studentCount;
+        /*
         console.log(
           "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
         );
+        */
         break;
       }
     }
@@ -630,9 +636,11 @@ function placeServiceCourses(
     if (fourthGrade[x].inHall == false && fourthGrade[x].isService == true) {
       if (wantedCapacity < fourthGrade[x].studentCount) {
         wantedCapacity = fourthGrade[x].studentCount;
+        /*
         console.log(
           "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
         );
+        */
         break;
       }
     }
@@ -641,8 +649,11 @@ function placeServiceCourses(
   // end of function
 }
 
+// below function takes in the grade array and compares each index of the plan array
+// column by column to place courses in a suitable manner
 function placeGradeCourses(plan, grade, index){
-  let i1, i2, i3;
+  let i1, i2, i3; // variables
+  // set according to given grade's year
   if(index == 0){
     i1 = 1;
     i2 = 2
@@ -668,7 +679,6 @@ function placeGradeCourses(plan, grade, index){
   }
 
   // courses with instructors that have busy schedules take precedence
-
   // start of loop
   for (let j = 0; j < instructors.length; j++) {
     for (let i = 0; i < lectureHalls.length; i++) {
@@ -945,23 +955,7 @@ function placeGradeCourses(plan, grade, index){
   // end of loop
 
 
-/*
-  grade.sort((obj1, obj2) =>
-  obj1.credit < obj2.credit
-    ? 1
-    : obj1.credit > obj2.credit
-    ? -1
-    : 0
-);
-
-
-*/
-
-
-
-
-
-    // now place courses without instructors' busy schedules
+    // now place courses without instructors' busy schedules that are compulsory
     for (let i = 0; i < lectureHalls.length; i++) {
       for (let k = 0; k < grade.length; k++) {
         if (
@@ -1093,7 +1087,7 @@ function placeGradeCourses(plan, grade, index){
     // end of loop
 
 
-        // now place courses without instructors' busy schedules
+        // now place courses without instructors' busy schedules that are elective
         for (let i = 0; i < lectureHalls.length; i++) {
           for (let k = 0; k < grade.length; k++) {
             if (
@@ -1224,19 +1218,6 @@ function placeGradeCourses(plan, grade, index){
         }
         // end of loop
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     let toReturn = 0;
 
     // check if any first grade courses remain unplaced
@@ -1244,22 +1225,19 @@ function placeGradeCourses(plan, grade, index){
       if (grade[x].inHall == false) {
         if (wantedCapacity < grade[x].studentCount) {
           wantedCapacity = grade[x].studentCount;
-          toReturn = grade[x].year;
+          toReturn = grade[x].year; // one of these lines is redundant but idk which one xD (JS is weird)
           return grade[x].year;
         }
         return grade[x].year;
       }
     }
   
+    // return 0
     return toReturn;
-
-
-
 }
 
 // below function is the pièce de résistance that ties it all together
 // aka the algorithm more or less
-// MORE SPAGHETTI CODE
 function coursePlannerAlgorithm(priority) {
   // variables
   cnt = 0; // reset counter
@@ -1270,10 +1248,10 @@ function coursePlannerAlgorithm(priority) {
   let thirdGrade = [];
   let fourthGrade = [];
 
-  // assign year property to serviceCourse objects
+  // assign year property to serviceCourse objects (useless currently but can be useful if needed)
   findYearOfService(serviceCourses);
 
-  // create two dimensional array for final course plan ([4][10])
+  // create two-dimensional array for final course plan ([4][10])
   let plan = new Array(rows);
   for (let i = 0; i < rows; i++) {
     plan[i] = new Array(columns);
@@ -1320,7 +1298,7 @@ function coursePlannerAlgorithm(priority) {
     }
   }
 
-  // sort course arrays according to their student count
+  // sort course arrays according to their student count (helps in placing courses in a suitable classroom)
   firstGrade.sort((obj1, obj2) =>
     obj1.studentCount < obj2.studentCount
       ? 1
@@ -1364,6 +1342,7 @@ function coursePlannerAlgorithm(priority) {
   // if constructing a plan fails, then whichever grade's year failed,
   // will be passed back as priority argument to this encompassing function to
   // try and place courses of that year first as a means to avoid the error
+  // (will probably fail in most cases but worth a try)
   let unplacedYear = 0;
   let flag = 0;
   
@@ -1449,24 +1428,17 @@ function coursePlannerAlgorithm(priority) {
     }
   }
   
-
-  // need to delete these before submitting
-  console.log(firstGrade);
-  console.log(secondGrade);
-  console.log(thirdGrade);
-  console.log(fourthGrade);
-  console.table(plan);
-  console.log(lectureHalls);
-
   // reset variables
   boolIncrementOnce[0] = true;
   boolIncrementOnce[1] = true;
   boolIncrementOnce[2] = true;
   boolIncrementOnce[3] = true;
 
+  // destructuring in use???
   return [flag, plan];
 }
 
+// reset objects if algorithm fails
 function resetLectureHalls() {
   for (let k = 0; k < lectureHalls.length; k++) {
     lectureHalls[k].isSoftOccupied = false;
@@ -1475,6 +1447,7 @@ function resetLectureHalls() {
   }
 }
 
+// reset objects if algorithm fails
 function resetCourses() {
   for (let k = 0; k < courses.length; k++) {
     courses[k].inHall = false;
@@ -1484,13 +1457,14 @@ function resetCourses() {
   }
 }
 
+// reset objects if algorithm fails
 function resetServiceCourses() {
   for (let k = 0; k < serviceCourses.length; k++) {
     serviceCourses[k].year = 0;
   }
 }
 
-// this is supposed to be called when a user cancels uploading files and wants to go back to the main screen
+// reset objects/variables if "Cancel" is clicked
 function resetVariables() {
   if (cnt != null) cnt = 0;
   if (instructors != null) instructors.length = 0;
@@ -1510,6 +1484,7 @@ function resetVariables() {
 }
 
 // function is async
+// read .csv data, insert into array and invoke algorithm if conditions are met
 async function readFile(file) {
   let newState;
   // wait for everything inside the below curly braces to finish before returning promise (makes invoking objects/functions wait for this function's completion)
@@ -1529,13 +1504,12 @@ async function readFile(file) {
                   lectureHalls = new Array(csvarray[i].length);
                   boolReadOnce[0] = false;
                 }
-                console.log("classroom.csv");
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // testing the state
+
                 newState = { ...getStateCopy() };
                 newState.parameters.fileStatus.lectureHalls = true;
                 setAppState(newState);
 
+                // if function returns true (data is valid and object is created) increment counter
                 if (assignArrayToLectureHallObject(csvarray[i], i)) {
                   if (boolIncrementOnce[0]) {
                     cnt = cnt + 1;
@@ -1550,9 +1524,7 @@ async function readFile(file) {
                 let bool = hasDigit.test(csvarray[i][0]);
                 if (bool) {
                   // service.csv
-                  console.log("service.csv");
 
-                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                   // testing the state
                   newState = { ...getStateCopy() };
                   newState.parameters.fileStatus.serviceCourses = true;
@@ -1562,6 +1534,7 @@ async function readFile(file) {
                     serviceCourses = new Array(csvarray[i].length);
                     boolReadOnce[1] = false;
                   }
+                  // if function returns true (data is valid and object is created) increment counter
                   if (assignArrayToServiceObject(csvarray[i], i)) {
                     if (boolIncrementOnce[1]) {
                       cnt = cnt + 1;
@@ -1574,14 +1547,13 @@ async function readFile(file) {
                     instructors = new Array(csvarray[i].length);
                     boolReadOnce[2] = false;
                   }
-                  console.log("busy.csv");
-
-                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                  
                   // testing the state
                   newState = { ...getStateCopy() };
                   newState.parameters.fileStatus.instructors = true;
                   setAppState(newState);
 
+                  // tl;dr, cram all instructor's busy schedules into one object instead of creating duplicates
                   // if instructors array exists
                   if (instructors && instructors.length) {
                     var personExists = false;
@@ -1625,6 +1597,7 @@ async function readFile(file) {
                     }
                   }
                   // if no such person exists, then create new object
+                  // if function returns true (data is valid and object is created) increment counter
                   if (
                     !personExists &&
                     assignArrayToInstructorObject(csvarray[i], i)
@@ -1644,13 +1617,13 @@ async function readFile(file) {
                   courses = new Array(csvarray[i].length);
                   boolReadOnce[3] = false;
                 }
-                console.log("courses.csv");
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 // testing the state
                 newState = { ...getStateCopy() };
                 newState.parameters.fileStatus.courses = true;
                 setAppState(newState);
 
+                // if function returns true (data is valid and object is created) increment counter
                 if (assignArrayToCourseObject(csvarray[i], i)) {
                   if (boolIncrementOnce[3]) {
                     cnt = cnt + 1;
@@ -1662,62 +1635,77 @@ async function readFile(file) {
           }
 
           if (personExists) {
-            // clean up instructors array
+            // clean up instructors array (array will have extra undefined elements 96.7% guaranteed)
             instructors = instructors.filter(function (x) {
               return x !== undefined;
             });
           }
 
-          personExists = false;
+          // clean rest of the arrays (helps avoid NPE errors)
+          lectureHalls = lectureHalls.filter(function (x) {
+            return x !== undefined;
+          });
 
-          // delete console.log before submitting
-          console.log(serviceCourses);
-          console.log(courses);
-          console.log(instructors);
+          courses = courses.filter(function (x) {
+            return x !== undefined;
+          });
+
+          serviceCourses = serviceCourses.filter(function (x) {
+            return x !== undefined;
+          });
+          
+
           console.log(lectureHalls);
 
           // reset variables
+          personExists = false;
           boolReadOnce[0] = true;
           boolReadOnce[1] = true;
           boolReadOnce[2] = true;
           boolReadOnce[3] = true;
 
+          // if all .csv files are read and have valid data
           if (cnt == 4) {
             // invoke algorithm
             let [flag, plan] = coursePlannerAlgorithm(1);
+
             // if one course isn't placed in the plan, try to add new classroom
             if (flag != 0) {
-              let dataIsValid = false;
-              errorString =
-                "Unsufficient classrooms, please enter id and capacity of atleast "; // pass this string to getNewClassroom(); function
-              errorString += wantedCapacity;
-              do {
-                // loop till new data is correct
-                console.log("Data is invalid, calling getNewClassroom");
-                let data = await getNewClassroom(errorString);
-                [dataIsValid, errorString] = addLectureHall(data);
-                // if entered data is invalid, then update string and loop till valid lecture hall data is entered
-              } while (dataIsValid === false);
 
-              resetLectureHalls();
-              resetCourses();
-              resetServiceCourses();
+              // loop till a valid plan is created
+              do{
+                  let dataIsValid = false;
+                  errorString =
+                    "Unsufficient classrooms, please enter id and capacity of atleast "; // pass this string to getNewClassroom(); function
+                  errorString += wantedCapacity;
+                  do {
+                    // loop till new data is correct
+                    console.log("Data is invalid, calling getNewClassroom");
+                    let data = await getNewClassroom(errorString);
+                    [dataIsValid, errorString] = addLectureHall(data);
+                    // if entered data is invalid, then update string and loop till valid lecture hall data is entered
+                  } while (dataIsValid === false);
 
-              let [status, plan] = coursePlannerAlgorithm(flag);
-              if (status != 0) {
-                console.log("FAILED TO PLACE SOME COURSES IN GRADE " + status);
-                console.log("CLASSROOM OF SIZE " + wantedCapacity + " NEEDED");
-                console.log(
-                  "NEED TO TRIGGER DIALOG TO ASK USER TO ADD ANOTHER CLASSROOM WITH ABOVE CAPACITY OR MORE"
-                );
-              } else {
-                let planState = getStateCopy();
-                planState.id = "plan-generated";
-                planState.parameters.plan = plan.concat();
-                planState.parameters.grade = 0; // show 1. grade plan
-                setAppState(planState);
-              }
+                  // reset objects/variables
+                  wantedCapacity = 0;
+                  resetLectureHalls();
+                  resetCourses();
+                  resetServiceCourses();
+
+                  // run algorithm again
+                  [flag, plan] = coursePlannerAlgorithm(flag);
+
+              }while (flag != 0)
+
+              // display weekly plan
+              let planState = getStateCopy();
+              planState.id = "plan-generated";
+              planState.parameters.plan = plan.concat();
+              planState.parameters.grade = 0; // show 1. grade plan
+              setAppState(planState);
+
             }
+            // algorithm successful on first attempt WOOT WOOT!
             else{
               let planState = getStateCopy();
                 planState.id = "plan-generated";
@@ -1742,7 +1730,7 @@ const loadCSV = async (file) => {
   return new Promise((resolve, reject) => {
     //  the array that will hold all the info
     let data = [];
-    // read csv file as a one line
+    // read csv file as one string
     let reader = new FileReader();
     reader.readAsText(file, "UTF-8");
     reader.onload = (e) => {
@@ -1750,8 +1738,10 @@ const loadCSV = async (file) => {
       if (e == null) {
         reject(e);
       } else {
+        // split according to linebreaks
         let rows = e.target.result.split("\r\n");
         rows.forEach((r) => {
+          // split again according to semicolons
           let splitted = r.split(";");
           data.push(splitted);
         });
@@ -1764,9 +1754,6 @@ const loadCSV = async (file) => {
 
 async function startReadingFile(file) {
   const wait = await readFile(file); // wait for this function call to return promise result
-  console.log("doneing"); // test async waiting
-  console.log(wait);
-  // return 0 for success
   return 1;
 }
 
