@@ -243,6 +243,13 @@ function addLectureHall(hallInfo) {
   // if either one of them is true (if one is a capacity value and another is an id string)
   if (boolIsInteger0 ^ boolIsInteger1) {
     if (boolIsInteger0 === true) {
+      for(let x = 0; x < lectureHalls.length; x++){
+        if(newHall[1] == lectureHalls[x].id){
+          errorString =
+          "Lecture hall "+ newHall[1] + " already exists, please choose a different name";
+          return [false, errorString]; // ask user again for inputs
+        }
+      }
       // check if new hall info is not suitable
       if (newHall[0] < wantedCapacity) {
         errorString =
@@ -255,6 +262,13 @@ function addLectureHall(hallInfo) {
         return [true, errorString];
       }
     } else if (boolIsInteger1 === true) {
+      for(let x = 0; x < lectureHalls.length; x++){
+        if(newHall[0] == lectureHalls[x].id){
+          errorString =
+          "Lecture hall "+ newHall[0] + " already exists, please choose a different name";
+          return [false, errorString]; // ask user again for inputs
+        }
+      }
       // check if new hall info is not suitable
       if (newHall[1] < wantedCapacity) {
         errorString =
@@ -594,12 +608,6 @@ function placeServiceCourses(
     if (firstGrade[x].inHall == false && firstGrade[x].isService == true) {
       if (wantedCapacity < firstGrade[x].studentCount) {
         wantedCapacity = firstGrade[x].studentCount;
-        /*
-        console.log(
-          "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
-        );
-        */
-        break;
       }
     }
   }
@@ -608,12 +616,6 @@ function placeServiceCourses(
     if (secondGrade[x].inHall == false && secondGrade[x].isService == true) {
       if (wantedCapacity < secondGrade[x].studentCount) {
         wantedCapacity = secondGrade[x].studentCount;
-        /*
-        console.log(
-          "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
-        );
-        */
-        break;
       }
     }
   }
@@ -622,12 +624,6 @@ function placeServiceCourses(
     if (thirdGrade[x].inHall == false && thirdGrade[x].isService == true) {
       if (wantedCapacity < thirdGrade[x].studentCount) {
         wantedCapacity = thirdGrade[x].studentCount;
-        /*
-        console.log(
-          "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
-        );
-        */
-        break;
       }
     }
   }
@@ -636,12 +632,6 @@ function placeServiceCourses(
     if (fourthGrade[x].inHall == false && fourthGrade[x].isService == true) {
       if (wantedCapacity < fourthGrade[x].studentCount) {
         wantedCapacity = fourthGrade[x].studentCount;
-        /*
-        console.log(
-          "CLASSROOM OF SIZE " + wantedCapacity + " OR MORE IS NEEDED"
-        );
-        */
-        break;
       }
     }
   }
@@ -1220,15 +1210,13 @@ function placeGradeCourses(plan, grade, index){
 
     let toReturn = 0;
 
-    // check if any first grade courses remain unplaced
+    // check if any courses remain unplaced
     for (let x = 0; x < grade.length; x++) {
       if (grade[x].inHall == false) {
+        toReturn = grade[x].year;
         if (wantedCapacity < grade[x].studentCount) {
           wantedCapacity = grade[x].studentCount;
-          toReturn = grade[x].year; // one of these lines is redundant but idk which one xD (JS is weird)
-          return grade[x].year;
         }
-        return grade[x].year;
       }
     }
   
