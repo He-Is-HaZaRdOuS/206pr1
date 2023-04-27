@@ -207,8 +207,8 @@ ul a:visited {
 }
 
 #drop-zone {
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 170px;
     margin: 16px auto;
     background-color: #cfe2fd;
     text-align: center;
@@ -361,4 +361,20 @@ thead tr th, #m, #a {
     background-color: #bad5fc;
     border-style: none;
     color: #023864;
+}
+
+.modal-content input{
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 20px;
+    padding: 8px;
+    width: 18%;
+    border-radius: 5px;
+    border-color: #023864;
+    font-family: "Times New Roman", sans-serif;
+    font-weight: bold;
+    color: #023864;
+    background-color: white;
+    border-style: solid;
+
 }
