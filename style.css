@@ -388,3 +388,15 @@ thead tr th, #m, #a {
     color: red;
     transform: scale(1.1,1.1)
 }
+
+.service-cell {
+    background-color: #d0ff67;
+}
+
+.elective-cell {
+    background-color: #84b4fa;
+}
+
+.compulsory-cell {
+    background-color: #ff938b;
+}

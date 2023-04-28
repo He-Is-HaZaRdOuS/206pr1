@@ -23,6 +23,7 @@ const WeeklyPlan = (title, plan) => {
   const body = generateElement("tbody");
   console.log(plan);
   let index = 0;
+  let cn = "";
   for (let i = 0; i < 2; i++) {
     let row = generateElement("tr");
     if (i == 0) {
@@ -37,9 +38,18 @@ const WeeklyPlan = (title, plan) => {
     for (let j = 0; j < 5; j++) {
       let text;
       if (plan[index]) {
+        if(plan[index].isService == true){
+          cn = "service-cell";
+        }
+        else if(plan[index].isCompulsory == false){
+          cn = "elective-cell";
+        }
+        else{
+          cn = "compulsory-cell";
+        }
         text = plan[index].code + "\n[" + plan[index].currentHall.id + "]";
         row.appendChild(
-          generateElement("td")
+          generateElement("td").className(cn)
             .appendChild(
               generateElement("div")
                 .appendChild(generateElement("p").innerText(text).build())
