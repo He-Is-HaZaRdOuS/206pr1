@@ -12,6 +12,17 @@ const getPlans = () => {
   return plans;
 };
 
+const deletePlan = (planName) => {
+  window.localStorage.setItem(
+    "plans",
+    JSON.stringify(
+      getPlans().filter((p) => {
+        return p.name != planName;
+      })
+    )
+  );
+};
+
 const getState = () => {
   let state = JSON.parse(window.localStorage.getItem("lastState"));
   if (state == null || state.id == null || state.id == "file-input") {
@@ -41,6 +52,7 @@ const storageManager = {
   getPlans: getPlans,
   getState: getState,
   saveState: saveState,
+  deletePlan: deletePlan,
 };
 
 export { storageManager };

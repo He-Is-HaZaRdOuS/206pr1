@@ -17,7 +17,7 @@ const SavedPlans = () => {
           let planState = getStateCopy();
           planState.id = "plan-generated";
           planState.parameters.plan = plan.plan;
-          planState.parameters.grade = 0; // show 1. grade plan
+          planState.parameters.grade = 0;
           setAppState(planState);
         })
       );
@@ -35,12 +35,22 @@ const SavedPlans = () => {
 };
 
 const listItem = (name, callback) => {
-  return generateElement("div")
+  const listItem = generateElement("div")
     .className("list-item")
     .appendChild(generateElement("i").innerText(name).build())
-    .appendChild(generateElement("i").className("fa fa-chevron-right").build())
-    .addEventListener("click", () => callback())
+    .addEventListener("click", () => callback());
+
+  const deleteButton = generateElement("button")
+    .className("delIconButton fa fa-trash-o")
+    .addEventListener("click", (e) => {
+      e.stopPropagation();
+      storageManager.deletePlan(name);
+      listItem.style("display: none");
+    })
     .build();
+
+  listItem.appendChild(deleteButton);
+  return listItem.build();
 };
 
 export { SavedPlans };
