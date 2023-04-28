@@ -1471,6 +1471,14 @@ function resetVariables() {
   boolIncrementOnce[3] = true;
 }
 
+// fetch and change property of a css class, can add more logic to it
+function changeBackgroundColour(className, colour){
+    let element = document.getElementsByClassName(className);
+    for(let i = 0; i < sbg.length; i++){
+      element[i].style.backgroundColor = colour;
+    }
+}
+
 // function is async
 // read .csv data, insert into array and invoke algorithm if conditions are met
 async function readFile(file) {
@@ -1628,21 +1636,7 @@ async function readFile(file) {
               return x !== undefined;
             });
           }
-
-          // clean rest of the arrays (helps avoid NPE errors)
-          lectureHalls = lectureHalls.filter(function (x) {
-            return x !== undefined;
-          });
-
-          courses = courses.filter(function (x) {
-            return x !== undefined;
-          });
-
-          serviceCourses = serviceCourses.filter(function (x) {
-            return x !== undefined;
-          });
           
-
           console.log(lectureHalls);
 
           // reset variables
@@ -1654,6 +1648,20 @@ async function readFile(file) {
 
           // if all .csv files are read and have valid data
           if (cnt == 4) {
+  
+            // clean rest of the arrays (helps avoid NPE errors)
+            lectureHalls = lectureHalls.filter(function (x) {
+              return x !== undefined;
+            });
+  
+            courses = courses.filter(function (x) {
+              return x !== undefined;
+            });
+  
+            serviceCourses = serviceCourses.filter(function (x) {
+              return x !== undefined;
+            });
+
             // invoke algorithm
             let [flag, plan] = coursePlannerAlgorithm(1);
 
@@ -1691,6 +1699,7 @@ async function readFile(file) {
               planState.parameters.plan = plan.concat();
               planState.parameters.grade = 0; // show 1. grade plan
               setAppState(planState);
+              // YOU CAN USE changeBackgroundColour() function here or below
 
             }
             // algorithm successful on first attempt WOOT WOOT!
@@ -1700,6 +1709,8 @@ async function readFile(file) {
                 planState.parameters.plan = plan.concat();
                 planState.parameters.grade = 0; // show 1. grade plan
                 setAppState(planState);
+                // OR HERE
+
             }
           }
 
