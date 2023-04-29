@@ -429,7 +429,7 @@ function placeServiceCourses(plan, grade){
       }
     }
   }
-
+  return true;
 }
 
 // below function takes in the grade array and compares each index of the plan array

@@ -12,12 +12,6 @@ class LectureHall{
         this.capacity = Number(capacity);
         this.isSoftOccupied = false;
     }
-
-    // override toString, console.log() does not automatically call this method so you need to explicitly call it.
-    toString(){
-        return `${this.id} ${this.capacity}`;
-    }
-
 }
 
 // make class public
