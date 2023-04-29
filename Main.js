@@ -291,375 +291,172 @@ function addLectureHall(hallInfo) {
   }
 }
 
-// below functions places service courses in their respective time slots
-// SPAGHETTI CODE ALERT (sorry for the disappointment)
-function placeServiceCourses(
-  plan,
-  firstGrade,
-  secondGrade,
-  thirdGrade,
-  fourthGrade
-) {
-  // variables
+// takes a grade array and places its service courses according to rules
+function placeServiceCourses(plan, grade){
+  let index, i1, i2, i3; // variables
   let columnOffset = Number.MIN_SAFE_INTEGER;
   let columnIndex = Number.MIN_SAFE_INTEGER;
-
-  // place Service courses ahead of time
-  for (let j = 0; j < firstGrade.length; j++) {
-    if (firstGrade[j].isService == true) {
-      for (let i = 0; i < lectureHalls.length; i++) {
-        // store column info
-        columnIndex = Number(firstGrade[j].serviceObject.day.description);
-        columnOffset = Number(firstGrade[j].serviceObject.time.description);
-        // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
-        if (
-          (firstGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == false &&
-            firstGrade[j].inHall == false) ||
-          (firstGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == true &&
-            firstGrade[j].inHall == false &&
-            (Number(firstGrade[j].serviceObject.day.description) !=
-              Number(lectureHalls[i].day) ||
-              Number(firstGrade[j].serviceObject.time.description) !=
-                Number(lectureHalls[i].time)))
-        ) {
-          // set properties
-          lectureHalls[i].isSoftOccupied = true;
-          lectureHalls[i].day = Number(
-            firstGrade[j].serviceObject.day.description
-          );
-          lectureHalls[i].time = Number(
-            firstGrade[j].serviceObject.time.description
-          );
-          firstGrade[j].currentHall = lectureHalls[i];
-          firstGrade[j].inHall = true;
-          // place service course in the plan array
-          plan[0][columnIndex + columnOffset] = firstGrade[j];
-        }
-      }
-    }
-  }
-
-  for (let j = 0; j < secondGrade.length; j++) {
-    if (secondGrade[j].isService == true) {
-      for (let i = 0; i < lectureHalls.length; i++) {
-        // store column info
-        columnIndex = Number(secondGrade[j].serviceObject.day.description);
-        columnOffset = Number(secondGrade[j].serviceObject.time.description);
-        // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
-        if (
-          (secondGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == false &&
-            secondGrade[j].inHall == false) ||
-          (secondGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == true &&
-            secondGrade[j].inHall == false &&
-            (Number(secondGrade[j].serviceObject.day.description) !=
-              Number(lectureHalls[i].day) ||
-              Number(secondGrade[j].serviceObject.time.description) !=
-                Number(lectureHalls[i].time)))
-        ) {
-          // check the same column for conflicting lecture halls
-          if (typeof plan[0][columnIndex + columnOffset] != "undefined") {
-            if (
-              plan[0][columnIndex + columnOffset].currentHall.id !=
-              lectureHalls[i].id
-            ) {
-              // set properties
-              lectureHalls[i].isSoftOccupied = true;
-              lectureHalls[i].day = Number(
-                secondGrade[j].serviceObject.day.description
-              );
-              lectureHalls[i].time = Number(
-                secondGrade[j].serviceObject.time.description
-              );
-              secondGrade[j].currentHall = lectureHalls[i];
-              secondGrade[j].inHall = true;
-              // place service course in the plan array
-              plan[1][columnIndex + columnOffset] = secondGrade[j];
-            }
-          } else {
-            // set properties
-            lectureHalls[i].isSoftOccupied = true;
-            lectureHalls[i].day = Number(
-              secondGrade[j].serviceObject.day.description
-            );
-            lectureHalls[i].time = Number(
-              secondGrade[j].serviceObject.time.description
-            );
-            secondGrade[j].currentHall = lectureHalls[i];
-            secondGrade[j].inHall = true;
-            // place service course in the plan array
-            plan[1][columnIndex + columnOffset] = secondGrade[j];
-          }
-        }
-      }
-    }
-  }
-
-  for (let j = 0; j < thirdGrade.length; j++) {
-    if (thirdGrade[j].isService == true) {
-      for (let i = 0; i < lectureHalls.length; i++) {
-        // store column info
-        columnIndex = Number(thirdGrade[j].serviceObject.day.description);
-        columnOffset = Number(thirdGrade[j].serviceObject.time.description);
-        // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
-        if (
-          (thirdGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == false &&
-            thirdGrade[j].inHall == false) ||
-          (thirdGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == true &&
-            thirdGrade[j].inHall == false &&
-            (Number(thirdGrade[j].serviceObject.day.description) !=
-              Number(lectureHalls[i].day) ||
-              Number(thirdGrade[j].serviceObject.time.description) !=
-                Number(lectureHalls[i].time)))
-        ) {
-          // check the same column for conflicting lecture halls
-          if (typeof plan[0][columnIndex + columnOffset] != "undefined") {
-            if (typeof plan[1][columnIndex + columnOffset] != "undefined") {
-              if (
-                plan[0][columnIndex + columnOffset].currentHall.id !=
-                  lectureHalls[i].id &&
-                plan[1][columnIndex + columnOffset].currentHall.id !=
-                  lectureHalls[i].id
-              ) {
-                // set properties
-                lectureHalls[i].isSoftOccupied = true;
-                lectureHalls[i].day = Number(
-                  thirdGrade[j].serviceObject.day.description
-                );
-                lectureHalls[i].time = Number(
-                  thirdGrade[j].serviceObject.time.description
-                );
-                thirdGrade[j].currentHall = lectureHalls[i];
-                thirdGrade[j].inHall = true;
-                // place service course in the plan array
-                plan[2][columnIndex + columnOffset] = thirdGrade[j];
-              }
-            } else {
-              if (
-                plan[0][columnIndex + columnOffset].currentHall.id !=
-                lectureHalls[i].id
-              ) {
-                // set properties
-                lectureHalls[i].isSoftOccupied = true;
-                lectureHalls[i].day = Number(
-                  thirdGrade[j].serviceObject.day.description
-                );
-                lectureHalls[i].time = Number(
-                  thirdGrade[j].serviceObject.time.description
-                );
-                thirdGrade[j].currentHall = lectureHalls[i];
-                thirdGrade[j].inHall = true;
-                // place service course in the plan array
-                plan[2][columnIndex + columnOffset] = thirdGrade[j];
-              }
-            }
-          } else {
-            if (typeof plan[1][columnIndex + columnOffset] != "undefined") {
-              if (
-                plan[1][columnIndex + columnOffset].currentHall.id !=
-                lectureHalls[i].id
-              ) {
-                // set properties
-                lectureHalls[i].isSoftOccupied = true;
-                lectureHalls[i].day = Number(
-                  thirdGrade[j].serviceObject.day.description
-                );
-                lectureHalls[i].time = Number(
-                  thirdGrade[j].serviceObject.time.description
-                );
-                thirdGrade[j].currentHall = lectureHalls[i];
-                thirdGrade[j].inHall = true;
-                // place service course in the plan array
-                plan[2][columnIndex + columnOffset] = thirdGrade[j];
-              }
-            } else {
-              // set properties
-              lectureHalls[i].isSoftOccupied = true;
-              lectureHalls[i].day = Number(
-                thirdGrade[j].serviceObject.day.description
-              );
-              lectureHalls[i].time = Number(
-                thirdGrade[j].serviceObject.time.description
-              );
-              thirdGrade[j].currentHall = lectureHalls[i];
-              thirdGrade[j].inHall = true;
-              // place service course in the plan array
-              plan[2][columnIndex + columnOffset] = thirdGrade[j];
-            }
-          }
-        }
-      }
-    }
-  }
-
-  for (let j = 0; j < fourthGrade.length; j++) {
-    // check if an empty classroom is suitable
-
-    if (fourthGrade[j].isService == true) {
-      for (let i = 0; i < lectureHalls.length; i++) {
-        // store column info
-        columnIndex = Number(fourthGrade[j].serviceObject.day.description);
-        columnOffset = Number(fourthGrade[j].serviceObject.time.description);
-        // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
-        if (
-          (fourthGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == false &&
-            fourthGrade[j].inHall == false) ||
-          (fourthGrade[j].studentCount <= lectureHalls[i].capacity &&
-            lectureHalls[i].isSoftOccupied == true &&
-            fourthGrade[j].inHall == false &&
-            (Number(fourthGrade[j].serviceObject.day.description) !=
-              Number(lectureHalls[i].day) ||
-              Number(fourthGrade[j].serviceObject.time.description) !=
-                Number(lectureHalls[i].time)))
-        ) {
-          // check the same column for conflicting lecture halls
-          if (typeof plan[0][columnIndex + columnOffset] != "undefined") {
-            if (typeof plan[1][columnIndex + columnOffset] != "undefined") {
-              if (typeof plan[2][columnIndex + columnOffset] != "undefined") {
-                if (
-                  plan[0][columnIndex + columnOffset].currentHall.id !=
-                    lectureHalls[i].id &&
-                  plan[1][columnIndex + columnOffset].currentHall.id !=
-                    lectureHalls[i].id &&
-                  plan[2][columnIndex + columnOffset].currentHall.id !=
-                    lectureHalls[i].id
-                ) {
-                  // set properties
-                  lectureHalls[i].isSoftOccupied = true;
-                  lectureHalls[i].day = Number(
-                    fourthGrade[j].serviceObject.day.description
-                  );
-                  lectureHalls[i].time = Number(
-                    fourthGrade[j].serviceObject.time.description
-                  );
-                  fourthGrade[j].currentHall = lectureHalls[i];
-                  fourthGrade[j].inHall = true;
-                  // place service course in the plan array
-                  plan[3][columnIndex + columnOffset] = fourthGrade[j];
-                }
-              } else {
-                if (
-                  plan[0][columnIndex + columnOffset].currentHall.id !=
-                    lectureHalls[i].id &&
-                  plan[1][columnIndex + columnOffset].currentHall.id !=
-                    lectureHalls[i].id
-                ) {
-                  // set properties
-                  lectureHalls[i].isSoftOccupied = true;
-                  lectureHalls[i].day = Number(
-                    fourthGrade[j].serviceObject.day.description
-                  );
-                  lectureHalls[i].time = Number(
-                    fourthGrade[j].serviceObject.time.description
-                  );
-                  fourthGrade[j].currentHall = lectureHalls[i];
-                  fourthGrade[j].inHall = true;
-                  // place service course in the plan array
-                  plan[3][columnIndex + columnOffset] = fourthGrade[j];
-                }
-              }
-            } else {
-              if (
-                plan[0][columnIndex + columnOffset].currentHall.id !=
-                lectureHalls[i].id
-              ) {
-                // set properties
-                lectureHalls[i].isSoftOccupied = true;
-                lectureHalls[i].day = Number(
-                  fourthGrade[j].serviceObject.day.description
-                );
-                lectureHalls[i].time = Number(
-                  fourthGrade[j].serviceObject.time.description
-                );
-                fourthGrade[j].currentHall = lectureHalls[i];
-                fourthGrade[j].inHall = true;
-                // place service course in the plan array
-                plan[3][columnIndex + columnOffset] = fourthGrade[j];
-              }
-            }
-          } else {
-            // set properties
-            lectureHalls[i].isSoftOccupied = true;
-            lectureHalls[i].day = Number(
-              fourthGrade[j].serviceObject.day.description
-            );
-            lectureHalls[i].time = Number(
-              fourthGrade[j].serviceObject.time.description
-            );
-            fourthGrade[j].currentHall = lectureHalls[i];
-            fourthGrade[j].inHall = true;
-            // place service course in the plan array
-            plan[3][columnIndex + columnOffset] = fourthGrade[j];
-          }
-        }
-      }
-    }
-  }
-  // end of loops
-
-  // check if all service courses were placed
-  for (let x = 0; x < firstGrade.length; x++) {
-    if (firstGrade[x].inHall == false && firstGrade[x].isService == true) {
-      if (wantedCapacity < firstGrade[x].studentCount) {
-        wantedCapacity = firstGrade[x].studentCount;
-      }
-    }
-  }
-
-  for (let x = 0; x < secondGrade.length; x++) {
-    if (secondGrade[x].inHall == false && secondGrade[x].isService == true) {
-      if (wantedCapacity < secondGrade[x].studentCount) {
-        wantedCapacity = secondGrade[x].studentCount;
-      }
-    }
-  }
-
-  for (let x = 0; x < thirdGrade.length; x++) {
-    if (thirdGrade[x].inHall == false && thirdGrade[x].isService == true) {
-      if (wantedCapacity < thirdGrade[x].studentCount) {
-        wantedCapacity = thirdGrade[x].studentCount;
-      }
-    }
-  }
-
-  for (let x = 0; x < fourthGrade.length; x++) {
-    if (fourthGrade[x].inHall == false && fourthGrade[x].isService == true) {
-      if (wantedCapacity < fourthGrade[x].studentCount) {
-        wantedCapacity = fourthGrade[x].studentCount;
-      }
-    }
-  }
-
-  // end of function
-}
-
-// below function takes in the grade array and compares each index of the plan array
-// column by column to place courses in a suitable manner
-function placeGradeCourses(plan, grade, index){
-  let i1, i2, i3; // variables
   // set according to given grade's year
-  if(index == 0){
+  if(grade[0].year == 1){
+    index = 0;
     i1 = 1;
     i2 = 2
     i3 = 3
   }
-  else if(index == 1){
+  else if(grade[0].year == 2){
+    index = 1;
     i1 = 0;
     i2 = 2;
     i3 = 3;
   }
-  else if(index == 2){
+  else if(grade[0].year == 3){
+    index = 2;
     i1 = 0;
     i2 = 1;
     i3 = 3;
   }
-  else if(index == 3){
+  else if(grade[0].year == 4){
+    index = 3;
+    i1 = 0;
+    i2 = 1;
+    i3 = 2;
+  }
+  else{
+    return false; // index out of bounds
+  }
+
+    for (let j = 0; j < grade.length; j++) {
+    // check if an empty classroom is suitable
+
+    if (grade[j].isService == true) {
+      for (let i = 0; i < lectureHalls.length; i++) {
+        // store column info
+        columnIndex = Number(grade[j].serviceObject.day.description);
+        columnOffset = Number(grade[j].serviceObject.time.description);
+        // if student count of a service course is less than the classroom and the classroom is empty on that day and that time
+        if (
+          (grade[j].studentCount <= lectureHalls[i].capacity &&
+            lectureHalls[i].isSoftOccupied == false &&
+            grade[j].inHall == false) ||
+          (grade[j].studentCount <= lectureHalls[i].capacity &&
+            lectureHalls[i].isSoftOccupied == true &&
+            grade[j].inHall == false &&
+            (Number(grade[j].serviceObject.day.description) !=
+              Number(lectureHalls[i].day) ||
+              Number(grade[j].serviceObject.time.description) !=
+                Number(lectureHalls[i].time)))
+        ) {
+          // check the same column for conflicting lecture halls
+          if (typeof plan[i1][columnIndex + columnOffset] != "undefined") {
+            if (typeof plan[i2][columnIndex + columnOffset] != "undefined") {
+              if (typeof plan[i3][columnIndex + columnOffset] != "undefined") {
+                if (
+                  plan[i1][columnIndex + columnOffset].currentHall.id !=
+                    lectureHalls[i].id &&
+                  plan[i2][columnIndex + columnOffset].currentHall.id !=
+                    lectureHalls[i].id &&
+                  plan[i3][columnIndex + columnOffset].currentHall.id !=
+                    lectureHalls[i].id
+                ) {
+                  // set properties
+                  lectureHalls[i].isSoftOccupied = true;
+                  lectureHalls[i].day = Number(
+                    grade[j].serviceObject.day.description
+                  );
+                  lectureHalls[i].time = Number(
+                    grade[j].serviceObject.time.description
+                  );
+                  grade[j].currentHall = lectureHalls[i];
+                  grade[j].inHall = true;
+                  // place service course in the plan array
+                  plan[index][columnIndex + columnOffset] = grade[j];
+                }
+              } else {
+                if (
+                  plan[i1][columnIndex + columnOffset].currentHall.id !=
+                    lectureHalls[i].id &&
+                  plan[i2][columnIndex + columnOffset].currentHall.id !=
+                    lectureHalls[i].id
+                ) {
+                  // set properties
+                  lectureHalls[i].isSoftOccupied = true;
+                  lectureHalls[i].day = Number(
+                    grade[j].serviceObject.day.description
+                  );
+                  lectureHalls[i].time = Number(
+                    grade[j].serviceObject.time.description
+                  );
+                  grade[j].currentHall = lectureHalls[i];
+                  grade[j].inHall = true;
+                  // place service course in the plan array
+                  plan[index][columnIndex + columnOffset] = grade[j];
+                }
+              }
+            } else {
+              if (
+                plan[i1][columnIndex + columnOffset].currentHall.id !=
+                lectureHalls[i].id
+              ) {
+                // set properties
+                lectureHalls[i].isSoftOccupied = true;
+                lectureHalls[i].day = Number(
+                  grade[j].serviceObject.day.description
+                );
+                lectureHalls[i].time = Number(
+                  grade[j].serviceObject.time.description
+                );
+                grade[j].currentHall = lectureHalls[i];
+                grade[j].inHall = true;
+                // place service course in the plan array
+                plan[index][columnIndex + columnOffset] = grade[j];
+              }
+            }
+          } else {
+            // set properties
+            lectureHalls[i].isSoftOccupied = true;
+            lectureHalls[i].day = Number(
+              grade[j].serviceObject.day.description
+            );
+            lectureHalls[i].time = Number(
+              grade[j].serviceObject.time.description
+            );
+            grade[j].currentHall = lectureHalls[i];
+            grade[j].inHall = true;
+            // place service course in the plan array
+            plan[index][columnIndex + columnOffset] = grade[j];
+          }
+        }
+      }
+    }
+  }
+
+}
+
+// below function takes in the grade array and compares each index of the plan array
+// column by column to place courses in a suitable manner
+function placeGradeCourses(plan, grade){
+  let index, i1, i2, i3; // variables
+  // set according to given grade's year
+  if(grade[0].year == 1){
+    index = 0;
+    i1 = 1;
+    i2 = 2
+    i3 = 3
+  }
+  else if(grade[0].year == 2){
+    index = 1;
+    i1 = 0;
+    i2 = 2;
+    i3 = 3;
+  }
+  else if(grade[0].year == 3){
+    index = 2;
+    i1 = 0;
+    i2 = 1;
+    i3 = 3;
+  }
+  else if(grade[0].year == 4){
+    index = 3;
     i1 = 0;
     i2 = 1;
     i3 = 2;
@@ -1325,7 +1122,12 @@ function coursePlannerAlgorithm(priority) {
   );
 
   // self-explanatory
-  placeServiceCourses(plan, firstGrade, secondGrade, thirdGrade, fourthGrade);
+  //placeServiceCourses(plan, firstGrade, secondGrade, thirdGrade, fourthGrade);
+
+  placeServiceCourses(plan, firstGrade);
+  placeServiceCourses(plan, secondGrade);
+  placeServiceCourses(plan, thirdGrade);
+  placeServiceCourses(plan, fourthGrade);
 
   // if constructing a plan fails, then whichever grade's year failed,
   // will be passed back as priority argument to this encompassing function to
@@ -1335,82 +1137,82 @@ function coursePlannerAlgorithm(priority) {
   let flag = 0;
   
   if (priority == 1) {
-    unplacedYear = placeGradeCourses(plan, firstGrade, 0);
+    unplacedYear = placeGradeCourses(plan, firstGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, secondGrade, 1);
+    unplacedYear = placeGradeCourses(plan, secondGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, thirdGrade, 2);
+    unplacedYear = placeGradeCourses(plan, thirdGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, fourthGrade, 3);
+    unplacedYear = placeGradeCourses(plan, fourthGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
   } else if (priority == 2) {
-    unplacedYear = placeGradeCourses(plan, secondGrade, 1);
+    unplacedYear = placeGradeCourses(plan, secondGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, firstGrade, 0);
+    unplacedYear = placeGradeCourses(plan, firstGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, thirdGrade, 2);
+    unplacedYear = placeGradeCourses(plan, thirdGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, fourthGrade, 3);
+    unplacedYear = placeGradeCourses(plan, fourthGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
   } else if (priority == 3) {
-    unplacedYear = placeGradeCourses(plan, thirdGrade, 2);
+    unplacedYear = placeGradeCourses(plan, thirdGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, secondGrade, 1);
+    unplacedYear = placeGradeCourses(plan, secondGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, firstGrade, 0);
+    unplacedYear = placeGradeCourses(plan, firstGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, fourthGrade, 3);
+    unplacedYear = placeGradeCourses(plan, fourthGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
   } else if (priority == 4) {
-    unplacedYear = placeGradeCourses(plan, fourthGrade, 3);
+    unplacedYear = placeGradeCourses(plan, fourthGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, secondGrade, 1);
+    unplacedYear = placeGradeCourses(plan, secondGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, thirdGrade, 2);
+    unplacedYear = placeGradeCourses(plan, thirdGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
     
-    unplacedYear = placeGradeCourses(plan, firstGrade, 0);
+    unplacedYear = placeGradeCourses(plan, firstGrade);
     if (unplacedYear != 0) {
       flag = unplacedYear;
     }
