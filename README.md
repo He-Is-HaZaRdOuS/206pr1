@@ -5,4 +5,4 @@ The data is sorted into arrays of objects of their respective classes and releva
 The Service Courses precede other Courses so they're placed first inside the schedule array, then Courses with their busy Professors and then regular Courses.
 Courses from different grades cannot occupy the same Lecture Hall as another Course from another grade at the same time of day.
 All Courses must have a Lecture Hall, else a pop-up message is displayed asking the user to add a new Lecture Hall to use and to try again.
-After successful insertion of all Courses according to rules, the Weekly program is displayed (WIP) and the user may choose to create another schedule (Also WIP).
+After successful insertion of all Courses according to rules, the Weekly program is displayed and the user may choose to save the created program.
