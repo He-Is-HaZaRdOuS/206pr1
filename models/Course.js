@@ -26,15 +26,6 @@ class Course{
         this.inHall = false;
         this.hasInstructorObject = false;
     }
-
-    /*
-        // override toString, console.log() does not automatically call this method so you need to explicitly call it.
-        toString(){
-            return `${this.name} is reserved on ${this.day.description} ${this.time.description}`;
-        }
-    */
-
-
 }
 
 export {Course};
