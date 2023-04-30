@@ -43,8 +43,7 @@ const HomeView = (parameters) => {
       generateElement("button")
         .innerText("Click to Instantly pass CENG206")
         .addEventListener("click", () => {
-          window.location.href =
-            "https://shattereddisk.github.io/rickroll/rickroll.mp4";
+          window.location.href = "https://www.youtube.com/watch?v=j5a0jTc9S10";
         })
         .build()
     )
