@@ -43,13 +43,20 @@ const HomeView = (parameters) => {
       generateElement("button")
         .innerText("Click to Instantly pass CENG206")
         .addEventListener("click", () => {
-          window.location.href = "https://shattereddisk.github.io/rickroll/rickroll.mp4";
+          window.location.href =
+            "https://shattereddisk.github.io/rickroll/rickroll.mp4";
         })
         .build()
     )
     .build();
 
-  page.appendChild(AybuLogo()).appendChild(middle).appendChild(btnArea);
+  const spacer = generateElement("div").className("v-spacer-150").build();
+
+  page
+    .appendChild(spacer)
+    .appendChild(AybuLogo())
+    .appendChild(middle)
+    .appendChild(btnArea);
 
   return page.build();
 };

@@ -170,6 +170,16 @@ body .main .down .file .choose-area label {
 
 }
 
+#gohome2:hover {
+   transition:0.4s ;
+   transform: scale(1.05);
+   color:dodgerblue ;
+
+}
+
+.v-spacer-150 {
+    padding-top: 150px;
+}
 
 
    #add, #Cancel{
