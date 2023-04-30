@@ -7,9 +7,7 @@ const WeeklyPlan = (title, plan) => {
     generateElement("thead")
       .appendChild(
         generateElement("tr")
-          .appendChild(
-            generateElement("th").innerText(title).id("first").build()
-          )
+          .appendChild(generateElement("th").innerText(title).id("first").build())
           .appendChild(generateElement("th").innerText("Monday").build())
           .appendChild(generateElement("th").innerText("Tuesday").build())
           .appendChild(generateElement("th").innerText("Wednesday").build())

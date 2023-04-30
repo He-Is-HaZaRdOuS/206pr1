@@ -73,7 +73,7 @@ const FileInputView = (parameters) => {
   });
 
   const cancelButton = generateElement("button")
-    .id("gohome")
+    .id("gohome2")
     .innerText("Cancel")
     .addEventListener("click", () => {
       resetVariables();
@@ -89,8 +89,10 @@ const FileInputView = (parameters) => {
     })
     .build();
 
+
   const container = generateElement("div")
     .className("main")
+    .id("cont")
     .appendChild(AybuLogo())
     .appendChild(
       generateElement("div")

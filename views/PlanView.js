@@ -13,6 +13,9 @@ const PlanView = (parameters) => {
       page.appendChild(SaveModal(parameters.plan));
     })
     .build();
+
+
+
   page
     .appendChild(
       generateElement("div")
@@ -33,6 +36,9 @@ const PlanView = (parameters) => {
             })
             .build()
         )
+        .appendChild(generateElement("button").id("green").innerText("service courses  ").build())
+        .appendChild(generateElement("button").id("pink").innerText("compulsory courses   ").build())
+        .appendChild(generateElement("button").id("darkBlue").innerText("elective courses").build())
         .appendChild(showSaveModal)
         .build()
     )
