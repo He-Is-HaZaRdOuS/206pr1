@@ -6,7 +6,7 @@ body {
     box-sizing: border-box;
     background-color:#bad5fc;
     font-family: "Arial Black", sans-serif;
-    color: dodgerblue;
+    color: #023864;
 
 }
 
@@ -160,14 +160,13 @@ body .main .down .file .choose-area label {
     cursor: pointer;
     display: inline-flex;
     border-radius: 50px;
-    border-bottom: 3px solid rgb(147, 12, 162);
+    justify-content: space-around;
 }
 
 .buttonarea button:hover{
    transition:0.4s ;
-   transform: scale(1.15);
+   transform: scale(1.05);
    color:dodgerblue ;
-   border-bottom: 3px solid Green;
 
 }
 
@@ -188,12 +187,8 @@ body .main .down .file .choose-area label {
     cursor: pointer;
     display:inline;
     border-radius: 50px;
-    border-bottom: 3px solid rgb(147, 12, 162);
 }
 #gohome{
-    margin-left: 150px;
-    margin-right: 160px;
-    margin-top: 50px;
     padding:15px;
     width: 20%;
     border-radius: 5px;
@@ -205,12 +200,8 @@ body .main .down .file .choose-area label {
     cursor: pointer;
     display:inline;
     border-radius: 50px;
-    border-bottom: 3px solid rgb(147, 12, 162);
 }
 #save{
-  margin-left: 160px;
-    margin-right: 30px;
-    margin-top: 50px;
     padding: 15px;
     width: 20%;
     border-radius: 5px;
@@ -223,25 +214,40 @@ body .main .down .file .choose-area label {
     cursor: pointer;
     display:inline;
     border-radius: 50px;
-    border-bottom: 3px solid LimeGreen;
 }
+
+#save2 {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
+  padding: 15px;
+  width: 20%;
+  border-radius: 5px;
+  border-radius: 5px;
+  border: none;
+  font-family: "Times New Roman", sans-serif;
+  font-weight: bold;
+  color: white;
+  background-color: #023864;
+  cursor: pointer;
+  display:inline;
+  border-radius: 50px;
+}
+
   #add:hover,#Cancel:hover{
     transition:0.4s ;
-    transform: scale(1.1);
+    transform: scale(1.01);
     color:dodgerblue ;
-    border-bottom: 3px solid LimeGreen;
 }
 #gohome:hover{
     transition:0.4s ;
-    transform: scale(1.1);
+    transform: scale(1.01);
     color:dodgerblue ;
-    border-bottom: 3px solid LimeGreen;
 }
 #save:hover{
     transition:0.4s ;
-    transform: scale(1.1);
+    transform: scale(1.01);
     color:dodgerblue ;
-    border-bottom: 3px solid MediumVioletRed;
 }
 
 a {
@@ -314,12 +320,8 @@ margin-left: 150px;
     cursor: pointer;
     display:inline;
     border-radius: 50px;
-    border-bottom: 3px solid rgb(147, 12, 162);
 
 }
-
-
-
 
 .modal {
     background-color: rgba(0, 0, 0, 0.4);
@@ -336,7 +338,7 @@ margin-left: 150px;
     width: 25%;
     min-width: 520px;
     padding: 20px 24px;
-    background-color:lightcyan;
+    background-color: white;
     border-radius: 8px;
 }
 
@@ -432,12 +434,12 @@ table {
     font-family: "Bahnschrift", sans-serif;
     font-weight: revert;
     text-align: center;
-    margin-left:430px;
+    margin: auto;
 }
 
 table tbody tr td {
     border-style: solid;
-    color:Indigo;
+    color:#023864;
 }
 
 table {
@@ -494,24 +496,29 @@ thead tr th, #m, #a {
     transform: scale(1.1,1.1)
 }
 
-
-
 #green{
 color: #d0ff67;
-background-color:black;
-border-radius: 5px;
+background-color: #023864;
+border: none;
+padding: 4px 8px;
+border-radius: 12px;
 }
 
 #pink{
 color: #ff938b;
-background-color:black;
-border-radius: 5px;
+background-color: #023864;
+border: none;
+padding: 4px 8px;
+border-radius: 12px;
+margin: auto 4px;
 }
 
 #darkBlue{
 color: #84b4fa;
-background-color:black;
-border-radius: 5px;
+background-color: #023864;
+border: none;
+padding: 4px 8px;
+border-radius: 12px;
 
 }
 #H1{
@@ -536,4 +543,18 @@ color:darkBlue;
 
 .compulsory-cell {
     background-color: #ff938b;
+}
+
+.plan-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    max-height: 100px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.type-badge-div {
+    display: flex;
+    align-items: center;
 }

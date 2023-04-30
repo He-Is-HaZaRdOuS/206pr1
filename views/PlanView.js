@@ -14,11 +14,10 @@ const PlanView = (parameters) => {
     })
     .build();
 
-
-
   page
     .appendChild(
       generateElement("div")
+        .className("plan-header")
         .appendChild(
           generateElement("button")
             .innerText("Go Home")
@@ -36,9 +35,29 @@ const PlanView = (parameters) => {
             })
             .build()
         )
-        .appendChild(generateElement("button").id("green").innerText("service courses  ").build())
-        .appendChild(generateElement("button").id("pink").innerText("compulsory courses   ").build())
-        .appendChild(generateElement("button").id("darkBlue").innerText("elective courses").build())
+        .appendChild(
+          generateElement("div")
+            .className("type-badge-div")
+            .appendChild(
+              generateElement("button")
+                .id("green")
+                .innerText("service courses")
+                .build()
+            )
+            .appendChild(
+              generateElement("button")
+                .id("pink")
+                .innerText("compulsory courses")
+                .build()
+            )
+            .appendChild(
+              generateElement("button")
+                .id("darkBlue")
+                .innerText("elective courses")
+                .build()
+            )
+            .build()
+        )
         .appendChild(showSaveModal)
         .build()
     )
@@ -54,7 +73,7 @@ const SaveModal = (plan) => {
   const planNameInp = generateElement("input").build();
   const saveButton = generateElement("button")
     .innerText("save")
-    .id("save")
+    .id("save2")
     .build();
 
   const [saveModal, modalVis, deleteModal] = Modal({
